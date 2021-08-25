@@ -1,5 +1,4 @@
 import numpy as np
-from numpy.lib.function_base import average
 import numpy.linalg as la
 import matplotlib.pyplot as plt
 from scipy.special import eval_chebyt
@@ -69,16 +68,17 @@ for i in range(I):
 
 Y = B.T @ X_whiten
 
+ica = FastICA(n_components=SERIES, random_state=0)
+_Y = ica.fit_transform(X.T).T * 8
+
 fig = plt.figure()
 ax1 = fig.add_subplot(2,1,1)
-ax1.plot(S[2, :])
-ax1.plot(Y[2, :] , label="reconstruct")
+ax1.plot(S[1, :])
+ax1.plot(_Y[1, :] , label="reconstruct")
 ax2 = fig.add_subplot(2,1,2)
 ax2.plot(S[1, :])
 ax2.plot(Y[1, :] , label="reconstruct")
 
-# ica = FastICA(n_components=SERIES, random_state=0)
-# Y = ica.fit_transform(X)
 
 # fig = plt.figure()
 # ax1 = fig.add_subplot(2,1,1)
