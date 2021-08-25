@@ -1,4 +1,5 @@
 import numpy as np
+from numpy.lib.function_base import average
 import numpy.linalg as la
 import matplotlib.pyplot as plt
 from scipy.special import eval_chebyt
@@ -13,7 +14,7 @@ def T_space(deg: int, a0: float):
     for _ in range(SAMPLE-1):
         a0 = eval_chebyt(deg, a0)
         result.append(a0)
-    return np.array(result)
+    return np.array(result) 
 
 A = np.array([[np.random.rand()-0.5 for i in range(SAMPLE)] for j in range(SAMPLE) ])
 
@@ -25,8 +26,33 @@ X_center = X - np.mean(X)
 
 # 固有値分解により、白色化されたX_whitenを計算する
 lambdas, P = la.eig(np.cov(X_center))
-Atilda = np.dot( la.inv(np.sqrt(np.diag(lambdas))) , P.T )
-X_whiten = np.dot(Atilda, X_center) # np.cov(X_whiten)は対角行列なはず
+Atilda = la.inv(np.sqrt(np.diag(lambdas))) @ P.T
+X_whiten = Atilda @ X_center # np.cov(X_whiten)は対角行列なはず
+
+# ICAに使用する関数g（ここでは４次キュムラント）
+g = lambda bx : bx**3
+g2 = lambda bx : 3*bx**2
+
+I = SERIES
+B = np.eye(I)
+
+# Bを直交行列かつ列ベクトルが大きさ１となるように規格化
+for i in range(I):
+    if i == 0:
+        pass
+    else:
+        B[:,i] = B[:,i] - B[:,:i] @ B[:,:i].T @ B[:,i]
+    B[:,i] = B[:,i] / np.linalg.norm(B[:,i], ord=2) # L2ノルムで規格化
+
+for i in range(I):
+    while True:
+        prevBi = B[:,i] 
+        B[:,i] = np.average([*map(lambda x : g(x @ B[:,i]) @ B[:,i], X_whiten.T)]) \
+            - np.average([*map(lambda x : g2(x @ B[:,i]), X_whiten.T)]) @ B[:,i]
+        if 0.99 < prevBi @ B[:,i] < 1.01:
+            break
+
+Y = B.T @ X_whiten
 
 ica = FastICA(n_components=SERIES, random_state=0)
 Y = ica.fit_transform(X)
