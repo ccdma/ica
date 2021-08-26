@@ -2,7 +2,9 @@ import numpy as np
 import numpy.linalg as la
 import matplotlib.pyplot as plt
 from scipy.special import eval_chebyt
+from scipy.stats import kurtosis
 from sklearn.decomposition import FastICA
+from sklearn.decomposition import PCA
 
 np.set_printoptions(precision=4)
 np.set_printoptions(suppress=True)
@@ -33,12 +35,17 @@ X_center = X - np.mean(X,axis=0)
 # 固有値分解により、白色化されたX_whitenを計算する
 lambdas, P = la.eig(np.cov(X_center, rowvar=1)) 
 assert np.allclose(np.cov(X_center), P @ np.diag(lambdas) @ P.T)
-for i in reversed(np.where(lambdas < 1.e-8)[0]): # 極めて小さい固有値は削除する
+for i in reversed(np.where(lambdas < 1.e-12)[0]): # 極めて小さい固有値は削除する
     lambdas = np.delete(lambdas, i, 0)
     P = np.delete(P, i, 1)
 Atilda = la.inv(np.sqrt(np.diag(lambdas))) @ P.T # 球面化行列
 X_whiten = Atilda @ X_center
 assert np.allclose(np.cov(X_whiten, rowvar=1), np.eye(X_whiten.shape[0]), atol=1.e-10) # 無相関化を確認（単位行列）
+
+pca = PCA(whiten=True)
+pca.fit(X_center.T)
+X_whiten = pca.transform(X_center.T).T
+assert np.allclose(np.cov(X_whiten, rowvar=1), np.eye(X_whiten.shape[0]), atol=1.e-5) # 無相関化を確認（単位行列）
 
 # ICAに使用する関数g（ここでは４次キュムラント）
 g = lambda bx : bx**3
@@ -49,9 +56,7 @@ B = np.array([[np.random.rand()-0.5 for i in range(I)] for j in range(I) ])
 
 # Bを直交行列かつ列ベクトルが大きさ１となるように規格化
 for i in range(I):
-    if i == 0:
-        pass
-    else:
+    if i > 0:
         B[:,i] = B[:,i] - B[:,:i] @ B[:,:i].T @ B[:,i] # 直交空間に射影
     B[:,i] = B[:,i] / la.norm(B[:,i], ord=2) # L2ノルムで規格化
 
@@ -76,15 +81,12 @@ ica = FastICA(n_components=SERIES, random_state=0)
 _Y = ica.fit_transform(X.T).T * 8
 
 fig = plt.figure()
-ax1 = fig.add_subplot(3,1,1)
-ax1.plot(S[2, :])
-ax1.plot(_Y[2, :] , label="reconstruct")
-ax2 = fig.add_subplot(3,1,2)
-ax2.plot(S[2, :])
-ax2.plot(Y[2, :] , label="reconstruct")
-ax3 = fig.add_subplot(3,1,3)
-ax3.plot(S[3, :])
-ax3.plot(Y[3, :] , label="reconstruct")
+ax1 = fig.add_subplot(2,1,1)
+ax1.plot(S[1, :])
+ax1.plot(_Y[0, :] , label="reconstruct")
+ax2 = fig.add_subplot(2,1,2)
+ax2.plot(S[1, :])
+ax2.plot(Y[0, :] , label="reconstruct")
 
 # fig = plt.figure()
 # ax1 = fig.add_subplot(2,1,1)
