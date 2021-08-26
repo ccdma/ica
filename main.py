@@ -76,12 +76,15 @@ ica = FastICA(n_components=SERIES, random_state=0)
 _Y = ica.fit_transform(X.T).T * 8
 
 fig = plt.figure()
-ax1 = fig.add_subplot(2,1,1)
+ax1 = fig.add_subplot(3,1,1)
 ax1.plot(S[2, :])
 ax1.plot(_Y[2, :] , label="reconstruct")
-ax2 = fig.add_subplot(2,1,2)
+ax2 = fig.add_subplot(3,1,2)
 ax2.plot(S[2, :])
 ax2.plot(Y[2, :] , label="reconstruct")
+ax3 = fig.add_subplot(3,1,3)
+ax3.plot(S[3, :])
+ax3.plot(Y[3, :] , label="reconstruct")
 
 # fig = plt.figure()
 # ax1 = fig.add_subplot(2,1,1)
