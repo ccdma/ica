@@ -10,7 +10,7 @@ np.set_printoptions(precision=4)
 np.set_printoptions(suppress=True)
 np.random.seed(seed=1)
 
-SAMPLE = 4
+SAMPLE = 2
 SERIES = 1000
 
 # チェビシェフ系列 
@@ -31,6 +31,10 @@ X = A @ S # [[x1(0), x1(0.1), x1(0.2)],[x2(0), x2(0.1), x2(0.2)]]のような感
 
 # 中心化を行う
 X_center = X - np.mean(X,axis=0)
+
+# plt.plot(S[1])
+# # plt.scatter(X[0], X[1])
+# plt.show()
 
 # 固有値分解により、白色化されたX_whitenを計算する
 lambdas, P = la.eig(np.cov(X_center, rowvar=1)) 
@@ -62,10 +66,14 @@ for i in range(I):
 
 # Bの決定(Y=B X_whiten)
 for i in range(I):
+    print("#####")
     for j in range(1000):
+        print(kurtosis((B.T @ X_whiten).T))
         prevBi = B[:,i].copy()
-        B[:,i] = np.average([*map(lambda x : g(x @ B[:,i]) * x, X_whiten.T)]) \
-            - np.average([*map(lambda x : g2(x @ B[:,i]), X_whiten.T)]) * B[:,i]
+        all = []
+        for x in X_whiten.T:
+            all.append(g(x @ B[:,i])*x - g2(x @ B[:,i])*B[:,i])
+        B[:,i] = np.average(all, axis=0)
         B[:,i] = B[:,i] - B[:,:i] @ B[:,:i].T @ B[:,i] # 直交空間に射影
         B[:,i] = B[:,i] / la.norm(B[:,i], ord=2) # L2ノルムで規格化
         print(prevBi @ B[:,i])
