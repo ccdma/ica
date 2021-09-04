@@ -58,7 +58,6 @@ for i in range(I):
 # Bの決定(Y=B X_whiten)
 for i in range(I):
     for j in range(1000):
-        print(kurtosis((B.T @ X_whiten).T))
         prevBi = B[:,i].copy()
         all = []
         for x in X_whiten.T:
@@ -66,7 +65,6 @@ for i in range(I):
         B[:,i] = np.average(all, axis=0)
         B[:,i] = B[:,i] - B[:,:i] @ B[:,:i].T @ B[:,i] # 直交空間に射影
         B[:,i] = B[:,i] / la.norm(B[:,i], ord=2) # L2ノルムで規格化
-        print(prevBi @ B[:,i])
         if 1.0 - 1.e-8 < abs(prevBi @ B[:,i]) < 1.0 + 1.e-8: # （内積1 <=> ほとんど変更がなければ）
             break
     else:
@@ -75,27 +73,15 @@ assert np.allclose(B @ B.T, np.eye(B.shape[0]), atol=1.e-10)
 
 Y = B.T @ X_whiten
 
-ica = FastICA(n_components=SERIES, random_state=0)
-_Y = ica.fit_transform(X.T).T * 8
+# ica = FastICA(n_components=SERIES, random_state=0)
+# _Y = ica.fit_transform(X.T).T * 8
 
-fig = plt.figure()
-ax1 = fig.add_subplot(2,1,1)
-ax1.plot(S[1, :])
-ax1.plot(S[0, :] , label="reconstruct")
-ax2 = fig.add_subplot(2,1,2)
-ax2.plot(Y[1, :])
-ax2.plot(Y[0, :] , label="reconstruct")
-
-# fig = plt.figure()
-# ax1 = fig.add_subplot(2,1,1)
-# ax1.plot(S[0])
-# ax1.plot(np.dot(Y[0]*3, ica.mixing_.T), label="reconstruct")
-# ax2 = fig.add_subplot(2,1,2)
-# ax2.plot(S[1])
-# ax2.plot(np.dot(Y[1]*3, ica.mixing_.T), label="reconstruct")
-# # plt.hist(S[0], bins=20)
-# # plt.hist(S[0], bins=20)
-
-# plt.xlim(-3,3)
-# plt.ylim(-3,3)
+fig, ax = plt.subplots(3, 1)
+for i in range(3):
+    param = [S, X, Y][i]
+    title = ["source", "mixed", "reconstruct"][i]
+    ax[i].set_title(title)
+    for j in range(param.shape[0]):
+        ax[i].plot(param[j, :])
+fig.tight_layout()
 plt.show()
