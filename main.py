@@ -11,7 +11,7 @@ np.set_printoptions(suppress=True)
 np.random.seed(seed=1)
 
 SAMPLE = 2
-SERIES = 1000
+SERIES = 500
 
 # チェビシェフ系列 
 # a0: 初期値
@@ -29,27 +29,18 @@ S = np.array([[np.sin(i/10/(j+1)) for i in range(SERIES)] for j in range(SAMPLE)
 # S = np.array([T_space(i+2, np.random.rand()/2) for i in range(SERIES)]).T
 X = A @ S # [[x1(0), x1(0.1), x1(0.2)],[x2(0), x2(0.1), x2(0.2)]]のような感じ、右に行くにつれて時間が経過する
 
-# 中心化を行う
-X_center = X - np.mean(X,axis=0)
-
-# plt.plot(S[1])
-# # plt.scatter(X[0], X[1])
-# plt.show()
+# 中心化を行う??
+X_center = X # - np.mean(X,axis=0)
 
 # 固有値分解により、白色化されたX_whitenを計算する
-lambdas, P = la.eig(np.cov(X_center, rowvar=1)) 
+lambdas, P = la.eig(np.cov(X_center)) 
 assert np.allclose(np.cov(X_center), P @ np.diag(lambdas) @ P.T)
 for i in reversed(np.where(lambdas < 1.e-12)[0]): # 極めて小さい固有値は削除する
     lambdas = np.delete(lambdas, i, 0)
     P = np.delete(P, i, 1)
 Atilda = la.inv(np.sqrt(np.diag(lambdas))) @ P.T # 球面化行列
 X_whiten = Atilda @ X_center
-assert np.allclose(np.cov(X_whiten, rowvar=1), np.eye(X_whiten.shape[0]), atol=1.e-10) # 無相関化を確認（単位行列）
-
-pca = PCA(whiten=True)
-pca.fit(X_center.T)
-X_whiten = pca.transform(X_center.T).T
-assert np.allclose(np.cov(X_whiten, rowvar=1), np.eye(X_whiten.shape[0]), atol=1.e-5) # 無相関化を確認（単位行列）
+assert np.allclose(np.cov(X_whiten), np.eye(X_whiten.shape[0]), atol=1.e-10) # 無相関化を確認（単位行列）
 
 # ICAに使用する関数g（ここでは４次キュムラント）
 g = lambda bx : bx**3
@@ -66,7 +57,6 @@ for i in range(I):
 
 # Bの決定(Y=B X_whiten)
 for i in range(I):
-    print("#####")
     for j in range(1000):
         print(kurtosis((B.T @ X_whiten).T))
         prevBi = B[:,i].copy()
@@ -91,9 +81,9 @@ _Y = ica.fit_transform(X.T).T * 8
 fig = plt.figure()
 ax1 = fig.add_subplot(2,1,1)
 ax1.plot(S[1, :])
-ax1.plot(_Y[0, :] , label="reconstruct")
+ax1.plot(S[0, :] , label="reconstruct")
 ax2 = fig.add_subplot(2,1,2)
-ax2.plot(S[1, :])
+ax2.plot(Y[1, :])
 ax2.plot(Y[0, :] , label="reconstruct")
 
 # fig = plt.figure()
