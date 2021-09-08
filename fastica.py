@@ -8,7 +8,7 @@ np.set_printoptions(suppress=True)
 np.random.seed(seed=1)
 
 SAMPLE = 4
-SERIES = 500
+SERIES = 50
 
 # チェビシェフ系列 
 # a0: 初期値
@@ -23,8 +23,8 @@ def chebyt_space(deg: int, a0: float, length=SAMPLE):
 A = np.array([[np.random.rand()-0.5 for i in range(SAMPLE)] for j in range(SAMPLE) ])
 
 # 元信号
-S = np.array([[np.sin(i/10/(j+1))+j for i in range(SERIES)] for j in range(SAMPLE)])
-# S = np.array([chebyt_space(i+2, np.random.rand()/2) for i in range(SERIES)]).T
+# S = np.array([[np.sin(i/10/(j+1))+j for i in range(SERIES)] for j in range(SAMPLE)])
+S = np.array([chebyt_space(i+2, np.random.rand()/2) for i in range(SERIES)]).T
 
 # 混合された信号
 X = A @ S # [[x1(0), x1(0.1), x1(0.2)],[x2(0), x2(0.1), x2(0.2)]]のような感じ、右に行くにつれて時間が経過する
