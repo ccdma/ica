@@ -2,8 +2,8 @@ from algorithm.common import Problem, Result
 import numpy.linalg as la
 import numpy as np
 
-def FastICA(prob: Problem, _assert=True):
-    X = np.array(prob.X)
+def FastICA(problem: Problem, _assert=True):
+    X = problem.X
     SAMPLE, SERIES = X.shape # (観測点数, 観測時間数)
 
     # 中心化を行う（観測点ごとの平均であることに注意）
