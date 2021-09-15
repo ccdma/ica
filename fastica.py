@@ -1,3 +1,5 @@
+from algorithm.common import Problem
+from algorithm.fastica import FastICA
 import numpy as np
 import numpy.linalg as la
 import matplotlib.pyplot as plt
