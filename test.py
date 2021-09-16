@@ -37,7 +37,7 @@ Y = result.Y
 # _Y = ica.fit_transform(X.T).T * 8
 
 data = [
-    [S,"source"],
+    [S, "source"],
     [X, "mixed"],
     [Y, "reconstruct"]
 ]

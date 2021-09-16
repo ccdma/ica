@@ -8,7 +8,7 @@ np.set_printoptions(suppress=True)
 np.random.seed(seed=2)
 
 SAMPLE = 4
-SERIES = 10000
+SERIES = 1000000
 
 # チェビシェフ系列 
 # a0: 初期値
