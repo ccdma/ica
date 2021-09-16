@@ -57,7 +57,7 @@ for i in range(len(data)):
     param = data[i][0]
     title = data[i][1]
     ax[i].set_title(title)
-    ax[i].set_xlim(SERIES-500,SERIES)
+    ax[i].set_xlim(SERIES-min(500, SERIES),SERIES)
     for j in range(param.shape[0]):
         ax[i].plot(param[j, :])
 fig.tight_layout()
