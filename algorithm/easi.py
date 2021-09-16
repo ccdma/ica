@@ -7,7 +7,7 @@ np.set_printoptions(precision=4)
 np.set_printoptions(suppress=True)
 np.random.seed(seed=1)
 
-SAMPLE = 4
+SAMPLE = 2
 SERIES = 1000
 
 # チェビシェフ系列 
@@ -23,7 +23,7 @@ def chebyt_space(deg: int, a0: float, length=SAMPLE):
 A = np.array([[np.random.rand()-0.5 for i in range(SAMPLE)] for j in range(SAMPLE) ])
 
 # 元信号
-S = np.array([[np.sin(i/10/(j+1))+j for i in range(SERIES)] for j in range(SAMPLE)])
+S = np.array([[np.sin(i/10/(j+1)) for i in range(SERIES)] for j in range(SAMPLE)])
 # S = np.array([chebyt_space(i+2, np.random.rand()/2) for i in range(SERIES)]).T
 
 # 混合された信号
@@ -35,9 +35,8 @@ def g(x):
     return -np.tanh(x)
 MU = 0.001953125
 
-# B = np.eye(SAMPLE)
 for x in X.T:
-    y = B @ x
+    y = np.array([B @ x]).T
     V = y @ y.T - np.eye(SAMPLE) + g(y) @ y.T - y @ g(y).T
     B = B - MU * V @ B
 Y = B @ X

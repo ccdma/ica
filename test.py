@@ -24,7 +24,7 @@ def chebyt_space(deg: int, a0: float, length=SAMPLE):
 A = np.array([[np.random.rand()-0.5 for i in range(SAMPLE)] for j in range(SAMPLE) ])
 
 # 元信号
-S = np.array([[np.sin(i/10/(j+1))+j for i in range(SERIES)] for j in range(SAMPLE)])
+S = np.array([[np.sin(i/10/(np.sqrt(float(j))+1))+j for i in range(SERIES)] for j in range(SAMPLE)])
 # S = np.array([chebyt_space(i+2, np.random.rand()/2) for i in range(SERIES)]).T
 
 # 混合された信号
