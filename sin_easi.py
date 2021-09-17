@@ -1,5 +1,4 @@
-from seed.chebyt import chebyt_series
-from seed.mixture import mixed_matrix
+from eval.seed import mixed_matrix
 from algorithm.easi import EASI
 import numpy as np
 import matplotlib.pyplot as plt
@@ -16,7 +15,6 @@ A = mixed_matrix(SAMPLE)
 
 # 元信号
 S = np.array([[np.sin(i/10/(j+1)) for i in range(SERIES)] for j in range(SAMPLE)])
-# S = np.array([chebyt_series(i+2, np.random.rand()/2, SERIES) for i in range(SAMPLE)])
 
 # 混合された信号
 X = A @ S # [[x1(0), x1(0.1), x1(0.2)],[x2(0), x2(0.1), x2(0.2)]]のような感じ、右に行くにつれて時間が経過する

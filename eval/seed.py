@@ -13,3 +13,10 @@ def chebyt_series(deg: int, a0: float, length: int) -> np.ndarray:
         a0 = eval_chebyt(deg, a0)
         result.append(a0)
     return np.array(result) 
+
+"""
+-0.5~+0.5なる混合行列を作成
+size: 正方行列のサイズ
+"""
+def mixed_matrix(size: int) -> np.ndarray:
+    return np.array([[np.random.rand()-0.5 for i in range(size)] for j in range(size) ])
