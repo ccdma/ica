@@ -18,7 +18,7 @@ class FastICAResult:
 #   [[x_0(0), x_0(1), x_0(2)]
 #    [x_1(0), x_1(1), x_1(2)]]
 #   s.t. x_point(time) 
-def FastICA(X: np.ndarray, _assert=True) -> FastICAResult:
+def fast_ica(X: np.ndarray, _assert=True) -> FastICAResult:
     SAMPLE, SERIES = X.shape # (観測点数, 観測時間数)
 
     # 中心化を行う（観測点ごとの平均であることに注意）
