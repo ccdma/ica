@@ -8,7 +8,7 @@ np.set_printoptions(precision=4)
 np.set_printoptions(suppress=True)
 np.random.seed(seed=2)
 
-SAMPLE = 4
+SAMPLE = 3
 SERIES = 1000
 
 # 完全にランダムな混合
