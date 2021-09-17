@@ -7,6 +7,12 @@ class EASI:
         self._mu = mu # 更新時パラメータ
         self._size = size # 観測点数
     
+    """
+    新しく観測したxを更新します
+    x: ndarray (self.size長ベクトル)
+
+    returns: 復元ベクトル
+    """
     def update(self, x: np.ndarray):
         y = np.array([self.B @ x]).T
         V = y @ y.T - np.eye(self._size) + self._g(y) @ y.T - y @ self._g(y).T
