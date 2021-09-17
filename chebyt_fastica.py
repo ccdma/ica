@@ -1,4 +1,3 @@
-
 from eval.product import inner_matrix
 from eval.seed import chebyt_series, mixed_matrix
 from algorithm.fastica import fast_ica
@@ -35,12 +34,12 @@ pprint.pprint(inner_matrix(S))
 pprint.pprint(inner_matrix(X))
 pprint.pprint(inner_matrix(Y))
 
-fig, ax = plt.subplots(1, len(data))
-for i in range(len(data)):
-    ax[i].set_title(data[i][1])
-    ax[i].scatter(data[i][0][0][0:-1], data[i][0][0][1:], s=10, c="blue", alpha=0.5)
-    ax[i].scatter(data[i][0][1][0:-1], data[i][0][1][1:], s=10, c="green", alpha=0.5)
-    ax[i].scatter(data[i][0][2][0:-1], data[i][0][2][1:], s=10, c="red", alpha=0.5)
-fig.tight_layout()
-plt.show()
+# fig, ax = plt.subplots(1, len(data))
+# for i in range(len(data)):
+#     ax[i].set_title(data[i][1])
+#     ax[i].scatter(data[i][0][0][0:-1], data[i][0][0][1:], s=10, c="blue", alpha=0.5)
+#     ax[i].scatter(data[i][0][1][0:-1], data[i][0][1][1:], s=10, c="green", alpha=0.5)
+#     ax[i].scatter(data[i][0][2][0:-1], data[i][0][2][1:], s=10, c="red", alpha=0.5)
+# fig.tight_layout()
+# plt.show()
 
