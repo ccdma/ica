@@ -9,14 +9,14 @@ np.set_printoptions(suppress=True)
 np.random.seed(seed=1)
 
 SAMPLE = 4
-SERIES = 50
+SERIES = 500
 
 # 完全にランダムな混合
 A = mixed_matrix(SAMPLE)
 
 # 元信号
-# S = np.array([[np.sin(i/10/(np.sqrt(float(j))+1))+j for i in range(SERIES)] for j in range(SAMPLE)])
-S = np.array([chebyt_series(i+2, np.random.rand()/2) for i in range(SERIES)]).T
+S = np.array([[np.sin(i/10/(np.sqrt(float(j))+1))+j for i in range(SERIES)] for j in range(SAMPLE)])
+# S = np.array([chebyt_series(i+2, np.random.rand()/2, SERIES) for i in range(SAMPLE)])
 
 # 混合された信号
 X = A @ S # [[x1(0), x1(0.1), x1(0.2)],[x2(0), x2(0.1), x2(0.2)]]のような感じ、右に行くにつれて時間が経過する

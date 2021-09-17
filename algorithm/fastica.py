@@ -14,7 +14,8 @@ class FastICAResult:
 
 """
 X: represents observed data
-EX)
+[[x1(0), x1(0.1), x1(0.2)],[x2(0), x2(0.1), x2(0.2)]]のような感じ、右に行くにつれて時間が経過する
+EX) 
    [[x_0(0), x_0(1), x_0(2)]
     [x_1(0), x_1(1), x_1(2)]]
     s.t. x_point(time) 
