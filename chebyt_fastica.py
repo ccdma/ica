@@ -9,8 +9,8 @@ np.set_printoptions(precision=4)
 np.set_printoptions(suppress=True)
 np.random.seed(seed=1)
 
-SAMPLE = 3
-SERIES = 1000
+SAMPLE = 50
+SERIES = 5000
 
 # 完全にランダムな混合
 A = mixed_matrix(SAMPLE)
@@ -30,16 +30,16 @@ data = [
     [Y, "reconstruct"]
 ]
 
-pprint.pprint(inner_matrix(S))
-pprint.pprint(inner_matrix(X))
-pprint.pprint(inner_matrix(Y))
+# pprint.pprint(inner_matrix(S))
+# pprint.pprint(inner_matrix(X))
+# pprint.pprint(inner_matrix(Y))
 
 fig, ax = plt.subplots(1, len(data))
 for i in range(len(data)):
+    P = data[i][0] # 対象の行列
     ax[i].set_title(data[i][1])
-    ax[i].scatter(data[i][0][0][0:-1], data[i][0][0][1:], s=10, c="blue", alpha=0.5)
-    ax[i].scatter(data[i][0][1][0:-1], data[i][0][1][1:], s=10, c="green", alpha=0.5)
-    ax[i].scatter(data[i][0][2][0:-1], data[i][0][2][1:], s=10, c="red", alpha=0.5)
+    for j in range(3, 6): #range(P.shape[0]): # 各系列
+        ax[i].scatter(P[j][0:-1], P[j][1:], s=10, alpha=0.5)
 fig.tight_layout()
 plt.show()
 

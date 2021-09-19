@@ -41,10 +41,10 @@ pprint.pprint(inner_matrix(Y))
 
 fig, ax = plt.subplots(1, len(data))
 for i in range(len(data)):
+    P = data[i][0] # 対象の行列
     ax[i].set_title(data[i][1])
-    ax[i].scatter(data[i][0][0][SERIES-1000:-1], data[i][0][0][SERIES-1000+1:], s=10, c="blue", alpha=0.5)
-    ax[i].scatter(data[i][0][1][SERIES-1000:-1], data[i][0][1][SERIES-1000+1:], s=10, c="green", alpha=0.5)
-    ax[i].scatter(data[i][0][2][SERIES-1000:-1], data[i][0][2][SERIES-1000+1:], s=10, c="red", alpha=0.5)
+    for j in range(P.shape[0]): # 各系列
+        start_index = SERIES-1000
+        ax[i].scatter(P[j][start_index:-1], P[j][start_index+1:], s=10, alpha=0.5)
 fig.tight_layout()
 plt.show()
-
