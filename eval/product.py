@@ -1,7 +1,7 @@
 import numpy as np
 
 """
-2つの列ごとの内積を計算し、行列にまとめます
+2つの行ごとの内積を計算し、行列にまとめます
 """
 def inner_matrix(P: np.ndarray) -> np.ndarray:
     res = np.eye(P.shape[0])
