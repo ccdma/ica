@@ -16,7 +16,7 @@ SERIES = 50000
 A = mixed_matrix(SAMPLE)
 
 # 元信号
-S = np.array([chebyt_series(i+2, np.random.rand()/2, SERIES) for i in range(SAMPLE)])
+S = np.array([chebyt_series(i+2, np.random.rand()*2-1, SERIES) for i in range(SAMPLE)])
 
 # 混合された信号
 X = A @ S # [[x1(0), x1(0.1), x1(0.2)],[x2(0), x2(0.1), x2(0.2)]]のような感じ、右に行くにつれて時間が経過する

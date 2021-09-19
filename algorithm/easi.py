@@ -13,7 +13,7 @@ class EASI:
 
     returns: 復元ベクトル
     """
-    def update(self, x: np.ndarray):
+    def update(self, x: np.ndarray) -> np.ndarray:
         y = np.array([self.B @ x]).T
         V = y @ y.T - np.eye(self._size) + self._g(y) @ y.T - y @ self._g(y).T
         self.B = self.B - self._mu * V @ self.B
