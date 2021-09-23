@@ -44,7 +44,7 @@ for i in range(len(data)):
     P = data[i][0] # 対象の行列
     ax[i].set_title(data[i][1])
     for j in range(P.shape[0]): # 各系列
-        start_index = SERIES-1000
+        start_index = SERIES-min(1000, SERIES)
         ax[i].scatter(P[j][start_index:-1], P[j][start_index+1:], s=10, alpha=0.5)
 fig.tight_layout()
 plt.show()
