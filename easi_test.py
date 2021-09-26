@@ -50,7 +50,7 @@ fig.tight_layout()
 
 retOps = [
     ReturnmapOption(S, title="source", start_index=SERIES-min(500, SERIES)),
-    ReturnmapOption(X, title="source", start_index=SERIES-min(500, SERIES)),
+    ReturnmapOption(X, title="mixed", start_index=SERIES-min(500, SERIES)),
     ReturnmapOption(Y, title="recnstruct", start_index=SERIES-min(500, SERIES)),
 ]
 # リターンマップの作成
