@@ -20,3 +20,9 @@ size: 正方行列のサイズ
 """
 def mixed_matrix(size: int) -> np.ndarray:
     return np.array([[np.random.rand()-0.5 for i in range(size)] for j in range(size) ])
+
+"""
+行列を縦に結合
+"""
+def concat(*ndarrays):
+    return np.vstack(ndarrays)

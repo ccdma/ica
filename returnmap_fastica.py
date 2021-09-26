@@ -1,5 +1,5 @@
 from eval.product import inner_matrix
-from eval.seed import chebyt_series, mixed_matrix
+from eval.seed import chebyt_series, concat, mixed_matrix
 from algorithm.fastica import fast_ica
 import numpy as np
 import matplotlib.pyplot as plt
@@ -16,7 +16,10 @@ SERIES = 1000
 A = mixed_matrix(SAMPLE)
 
 # 元信号
-S = np.array([chebyt_series(i+2, np.random.rand()*2-1, SERIES) for i in range(SAMPLE)])
+S = concat(
+    [chebyt_series(i+2, np.random.rand()*2-1, SERIES) for i in range(2)],
+    [[np.sin(j/10/(i+1)) for j in range(SERIES)] for i in range(SAMPLE-2)]
+)
 
 # 混合された信号
 X = A @ S # [[x1(0), x1(0.1), x1(0.2)],[x2(0), x2(0.1), x2(0.2)]]のような感じ、右に行くにつれて時間が経過する
