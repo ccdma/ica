@@ -27,7 +27,7 @@ class ReturnmapOption:
         for j in range(self.A.shape[0]): # 各系列
             ax.scatter(self.A[j][self.start_index:-1], self.A[j][self.start_index+1:], s=6, alpha=0.5, label=self.each[j].label)
         if any(map(lambda e : e.label != None, self.each)):
-            ax.legend()
+            ax.legend(loc='upper right')
 
 @d.dataclass
 class PlotOption:
@@ -51,4 +51,4 @@ class PlotOption:
         for j in range(self.A.shape[0]):
             ax.plot(self.A[j, self.start_index:self.end_index], alpha=0.7, label=self.each[j].label)
         if any(map(lambda e : e.label != None, self.each)):
-            ax.legend()
+            ax.legend(loc='upper right')
