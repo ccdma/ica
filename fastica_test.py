@@ -10,7 +10,7 @@ np.set_printoptions(precision=4)
 np.set_printoptions(suppress=True)
 np.random.seed(seed=1)
 
-SAMPLE = 3
+SAMPLE = 4
 SERIES = 1000
 
 # 完全にランダムな混合
@@ -19,7 +19,7 @@ A = mixed_matrix(SAMPLE)
 # 元信号
 S = concat(
     [chebyt_series(i+2, np.random.rand()*2-1, SERIES) for i in range(2)],
-    [[np.sin(j/10/(i+1)) for j in range(SERIES)] for i in range(SAMPLE-2)]
+    [[np.sin(j/10/np.sqrt(i+1)) for j in range(SERIES)] for i in range(SAMPLE-2)]
 )
 
 # 混合された信号
@@ -32,9 +32,9 @@ pprint.pprint(inner_matrix(X))
 pprint.pprint(inner_matrix(Y))
 
 pltOps = [
-    PlotOption(S, title="source"),
-    PlotOption(X, title="mixed"),
-    PlotOption(Y, title="reconstruct")
+    PlotOption(S, title="source", end_index=100),
+    PlotOption(X, title="mixed", end_index=100),
+    PlotOption(Y, title="reconstruct", end_index=100)
 ]
 # グラフの作成
 fig, ax = plt.subplots(len(pltOps), 1)

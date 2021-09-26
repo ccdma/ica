@@ -20,10 +20,13 @@ class PlotOption:
     A: np.ndarray
     title: str = None
     start_index: int = 0
+    end_index: int = None
+
+    def __post_init__(self):
+        if self.end_index == None:
+            self.end_index = self.A.shape[1]
 
     def plot(self, ax: plt.Axes):
         ax.set_title(self.title)
-        SERIES = self.A.shape[1]
-        ax.set_xlim(self.start_index, SERIES)
         for j in range(self.A.shape[0]):
-            ax.plot(self.A[j, :], alpha=0.7)
+            ax.plot(self.A[j, self.start_index:self.end_index], alpha=0.7)
