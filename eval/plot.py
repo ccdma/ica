@@ -25,7 +25,7 @@ class ReturnmapOption:
     def plot(self, ax: plt.Axes):
         ax.set_title(self.title)
         for j in range(self.A.shape[0]): # 各系列
-            ax.scatter(self.A[j][self.start_index:-1], self.A[j][self.start_index+1:], s=10, alpha=0.5, label=self.each[j].label)
+            ax.scatter(self.A[j][self.start_index:-1], self.A[j][self.start_index+1:], s=6, alpha=0.5, label=self.each[j].label)
         if any(map(lambda e : e.label != None, self.each)):
             ax.legend()
 

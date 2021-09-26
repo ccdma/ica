@@ -20,7 +20,9 @@ def main():
     )
     desc = [
         EachOption(label="T2"),
-        EachOption(label="T3")
+        EachOption(label="T3"),
+        EachOption(label="SIN/√1"),
+        EachOption(label="SIN/√2")
     ]
     title = "sin_chebyt"
 
@@ -48,11 +50,13 @@ def main():
     for i in range(len(pltOps)):
         pltOps[i].plot(ax[i])
     fig.tight_layout()
-    fig.suptitle(f"{title}_plot")
-    fig.savefig(f"{title}_plot.png")
+    fig.suptitle(f"{title}", x=0.1, y=0.97)
+    fig.set_figheight(5)
+    fig.set_figwidth(10)
+    fig.savefig(f"{title}_p.png")
 
     retOps = [
-        ReturnmapOption(S, title="source"),
+        ReturnmapOption(S, title="source", each=desc),
         ReturnmapOption(X, title="mixed"),
         ReturnmapOption(Y, title="recnstruct"),
     ]
@@ -61,8 +65,10 @@ def main():
     for i in range(len(retOps)):
         retOps[i].plot(ax[i])
     fig.tight_layout()
-    fig.suptitle(f"{title}_returnmap")
-    fig.savefig(f"{title}_returnmap.png")
+    fig.suptitle(f"{title}", x=0.1, y=0.97)
+    fig.set_figheight(5)
+    fig.set_figwidth(12)
+    fig.savefig(f"{title}_r.png")
 
 if __name__ == '__main__':
     main()
