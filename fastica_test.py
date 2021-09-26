@@ -53,7 +53,7 @@ def main():
     fig.suptitle(f"{title}", x=0.1, y=0.97)
     fig.set_figheight(5)
     fig.set_figwidth(10)
-    fig.savefig(f"{title}_p.png")
+    fig.savefig(f"out/{title}_p.png")
 
     retOps = [
         ReturnmapOption(S, title="source", each=desc),
@@ -68,7 +68,7 @@ def main():
     fig.suptitle(f"{title}", x=0.1, y=0.97)
     fig.set_figheight(5)
     fig.set_figwidth(12)
-    fig.savefig(f"{title}_r.png")
+    fig.savefig(f"out/{title}_r.png")
 
 if __name__ == '__main__':
     main()
