@@ -72,3 +72,6 @@ def fast_ica(X: np.ndarray, _assert=True) -> FastICAResult:
     Y = B.T @ X_whiten
 
     return FastICAResult(Y)
+
+# ica = FastICA(n_components=SERIES, random_state=0)
+# _Y = ica.fit_transform(X.T).T * 8
