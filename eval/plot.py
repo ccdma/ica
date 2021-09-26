@@ -26,4 +26,4 @@ class PlotOption:
         SERIES = self.A.shape[1]
         ax.set_xlim(self.start_index, SERIES)
         for j in range(self.A.shape[0]):
-            ax.plot(self.A[j, :])
+            ax.plot(self.A[j, :], alpha=0.7)

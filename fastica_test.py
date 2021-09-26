@@ -1,3 +1,4 @@
+from eval.plot import PlotOption, ReturnmapOption
 from algorithm.fastica import fast_ica
 from eval.product import inner_matrix
 from eval.seed import chebyt_series, concat, mixed_matrix
@@ -26,32 +27,30 @@ X = A @ S # [[x1(0), x1(0.1), x1(0.2)],[x2(0), x2(0.1), x2(0.2)]]のような感
 
 Y = fast_ica(X, _assert=False).Y
 
-data = [
-    [S, "source"],
-    [X, "mixed"],
-    [Y, "reconstruct"]
-]
-
 pprint.pprint(inner_matrix(S))
 pprint.pprint(inner_matrix(X))
 pprint.pprint(inner_matrix(Y))
 
+pltOps = [
+    PlotOption(S, title="source"),
+    PlotOption(X, title="mixed"),
+    PlotOption(Y, title="reconstruct")
+]
 # グラフの作成
-fig, ax = plt.subplots(len(data), 1)
-for i in range(len(data)):
-    param = data[i][0]
-    title = data[i][1]
-    ax[i].set_title(title)
-    for j in range(param.shape[0]):
-        ax[i].plot(param[j, :])
+fig, ax = plt.subplots(len(pltOps), 1)
+for i in range(len(pltOps)):
+    pltOps[i].plot(ax[i])
 fig.tight_layout()
 
+retOps = [
+    ReturnmapOption(S, title="source"),
+    ReturnmapOption(X, title="mixed"),
+    ReturnmapOption(Y, title="recnstruct"),
+]
 # リターンマップの作成
-fig, ax = plt.subplots(1, len(data))
-for i in range(len(data)):
-    P = data[i][0] # 対象の行列
-    ax[i].set_title(data[i][1])
-    for j in range(P.shape[0]): # 各系列
-        ax[i].scatter(P[j][:-1], P[j][1:], s=10, alpha=0.5)
+fig, ax = plt.subplots(1, len(retOps))
+for i in range(len(retOps)):
+    retOps[i].plot(ax[i])
 fig.tight_layout()
+
 plt.show()
