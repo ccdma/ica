@@ -10,7 +10,7 @@ from pprint import pprint
 
 np.set_printoptions(precision=4)
 np.set_printoptions(suppress=True)
-np.random.seed(seed=1)
+np.random.seed(seed=2)
 
 def main(S, desc, title):
 
@@ -33,7 +33,7 @@ def main(S, desc, title):
     p.print("A:")
     p.pprint(A)
 
-    p.print("inner(S)")
+    p.print("inner(S):")
     p.pprint(inner_matrix(S))
     p.print("inner(X):")
     p.pprint(inner_matrix(X))
@@ -89,7 +89,7 @@ if __name__ == '__main__':
     main(S, desc, title)
 
     S = concat(
-        [[np.sin(j/10/(i+1)) for j in range(5000)] for i in range(4)]
+        [[np.sin(j/10/(i+4)) for j in range(500)] for i in range(4)]
     )
     desc = [
         EachOption(label="sin[x/(10*1)]"),
