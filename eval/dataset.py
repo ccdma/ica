@@ -124,7 +124,7 @@ DATALIST = [
         S=concat(
             [[(i+1)*np.sin(j/10/np.sqrt(i+1)) for j in range(1000)] for i in range(4)]
         ),
-        labels=[LabelOption(label=f"sin[x/(10√1)]*{i+1}") for i in range(4)],
+        labels=[LabelOption(label=f"sin[x/(10√{i+1})]*{i+1}") for i in range(4)],
     ),
 
 # 10000点づつのデータ
@@ -224,7 +224,7 @@ DATALIST = [
         S=concat(
             [[(i+1)*np.sin(j/10/np.sqrt(i+1)) for j in range(10000)] for i in range(4)]
         ),
-        labels=[LabelOption(label=f"sin[x/(10√1)]*{i+1}") for i in range(4)],
+        labels=[LabelOption(label=f"sin[x/(10√{i+1})]*{i+1}") for i in range(4)],
     ),
 ]
 
