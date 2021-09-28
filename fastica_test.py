@@ -6,7 +6,7 @@ from eval.product import inner_matrix
 from eval.seed import chebyt_series, concat, mixed_matrix
 import numpy as np
 import matplotlib.pyplot as plt
-from pprint import pprint
+import sys
 
 np.set_printoptions(precision=4)
 np.set_printoptions(suppress=True)
@@ -15,7 +15,7 @@ np.random.seed(seed=2)
 def main(S, desc, title):
 
     f = open(f"out/fastica/{title}.txt", 'w+')
-    p = Printer(f)
+    p = Printer(f, sys.__stdout__)
 
     SERIES = S.shape[1]
     SAMPLE = S.shape[0]
