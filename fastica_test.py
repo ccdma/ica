@@ -61,7 +61,7 @@ def fastica_report(dataset: Dataset):
     fig.savefig(f"out/fastica/{key}_p.png")
 
     retOps = [
-        ReturnmapOption(S, title="source", each=labels),
+        ReturnmapOption(S, title="source", labels=labels),
         ReturnmapOption(X, title="mixed"),
         ReturnmapOption(Y, title="recnstruct"),
     ]
