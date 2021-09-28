@@ -4,7 +4,7 @@ import numpy as np
 from typing import List 
 
 @d.dataclass
-class EachOption:
+class LabelOption:
     label: str = None
     color: str = None
 
@@ -14,13 +14,13 @@ class ReturnmapOption:
     A: np.ndarray
     title: str = None
     start_index: int = 0
-    each: List[EachOption] = None
+    each: List[LabelOption] = None
 
     def __post_init__(self):
         if self.each == None:
             self.each = []
         for _ in range(self.A.shape[0]-len(self.each)):
-            self.each.append(EachOption())
+            self.each.append(LabelOption())
 
     def plot(self, ax: plt.Axes):
         ax.set_title(self.title)
@@ -36,19 +36,19 @@ class PlotOption:
     title: str = None
     start_index: int = 0
     end_index: int = None
-    each: List[EachOption] = None
+    labels: List[LabelOption] = None
 
     def __post_init__(self):
-        if self.each == None:
-            self.each = []
-        for _ in range(self.A.shape[0]-len(self.each)):
-            self.each.append(EachOption())
+        if self.labels == None:
+            self.labels = []
+        for _ in range(self.A.shape[0]-len(self.labels)):
+            self.labels.append(LabelOption())
         if self.end_index == None:
             self.end_index = self.A.shape[1]
 
     def plot(self, ax: plt.Axes):
         ax.set_title(self.title)
         for j in range(self.A.shape[0]):
-            ax.plot(self.A[j, self.start_index:self.end_index], alpha=0.7, label=self.each[j].label)
-        if any(map(lambda e : e.label != None, self.each)):
+            ax.plot(self.A[j, self.start_index:self.end_index], alpha=0.7, label=self.labels[j].label)
+        if any(map(lambda e : e.label != None, self.labels)):
             ax.legend(loc='upper right')
