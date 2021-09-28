@@ -17,9 +17,9 @@ class Dataset:
 
 DATALIST = [
     Dataset(
-        key="isin_500",
+        key="isin_test",
         S=concat(
-            [[np.sin(j/10/(i+4)) for j in range(500)] for i in range(4)]
+            [[np.sin(j/10/(i+1)) for j in range(1000)] for i in range(4)]
         ),
         labels=[
             LabelOption(label="sin[x/(10*1)]"),

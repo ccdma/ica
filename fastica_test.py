@@ -11,7 +11,7 @@ import sys
 
 np.set_printoptions(precision=4)
 np.set_printoptions(suppress=True)
-np.random.seed(seed=2)
+np.random.seed(seed=4)
 
 def fastica_report(dataset: Dataset):
 
@@ -46,9 +46,9 @@ def fastica_report(dataset: Dataset):
     p.pprint(inner_matrix(Y))
 
     pltOps = [
-        PlotOption(S, title="source", end_index=500, labels=labels),
-        PlotOption(X, title="mixed", end_index=500),
-        PlotOption(Y, title="reconstruct", end_index=500)
+        PlotOption(S, title="source", labels=labels),
+        PlotOption(X, title="mixed"),
+        PlotOption(Y, title="reconstruct")
     ]
     # グラフの作成
     fig, ax = plt.subplots(len(pltOps), 1)
@@ -78,4 +78,4 @@ def fastica_report(dataset: Dataset):
     f.close()
 
 if __name__ == '__main__':
-    fastica_report(DATADICT["fsin_1000"])
+    fastica_report(DATADICT["isin_test"])
