@@ -78,4 +78,7 @@ def fastica_report(dataset: Dataset):
     f.close()
 
 if __name__ == '__main__':
-    fastica_report(DATADICT["isin_test"])
+    fastica_report(DATADICT["isin_1000"])
+    fastica_report(DATADICT["sqrtsin_1000"])
+    fastica_report(DATADICT["sin2_chebyt2_1000"])
+    fastica_report(DATADICT["chebyt2-5_1000"])

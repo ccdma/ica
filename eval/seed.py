@@ -26,3 +26,4 @@ def mixed_matrix(size: int) -> np.ndarray:
 """
 def concat(*ndarrays):
     return np.vstack(ndarrays)
+

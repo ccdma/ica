@@ -5,6 +5,11 @@ from typing import List
 import numpy as np
 
 @d.dataclass
+class Series:
+    data: np.ndarray
+    label: LabelOption
+
+@d.dataclass
 class Dataset: 
     key: str
     S: np.ndarray
@@ -15,9 +20,15 @@ class Dataset:
         if(self.description == None):
             self.description = self.key
 
+    @staticmethod
+    def ofSerieses(key: str, serieses: List[Series]):
+        S = np.array(list(map(lambda s: s.data, serieses)))
+        labels = list(map(lambda s: s.label, serieses))
+        return Dataset(key=key, S=S, labels=labels)
+
 DATALIST = [
     Dataset(
-        key="isin_test",
+        key="isin_1000",
         S=concat(
             [[np.sin(j/10/(i+1)) for j in range(1000)] for i in range(4)]
         ),
@@ -29,7 +40,7 @@ DATALIST = [
         ],
     ),
     Dataset(
-        key="fsin_1000",
+        key="sqrtsin_1000",
         S=concat(
             [[np.sin(j/10/np.sqrt(i+1)) for j in range(1000)] for i in range(4)]
         ),
@@ -41,7 +52,7 @@ DATALIST = [
         ]
     ),
     Dataset(
-        key="sin_chebyt_1000",
+        key="sin2_chebyt2_1000",
         S=concat(
             [chebyt_series(i+2, np.random.rand()*2-1, 1000) for i in range(2)],
             [[np.sin(j/10/np.sqrt(i+1)) for j in range(1000)] for i in range(2)]
@@ -54,7 +65,7 @@ DATALIST = [
         ]
     ),
     Dataset(
-        key="chebyt",
+        key="chebyt2-5",
         S=concat(
             [chebyt_series(i+2, np.random.rand()*2-1, 1000) for i in range(4)],
         ),
