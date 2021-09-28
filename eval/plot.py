@@ -14,6 +14,7 @@ class ReturnmapOption:
     A: np.ndarray
     title: str = None
     start_index: int = 0
+    end_index: int = None
     labels: List[LabelOption] = None
 
     def __post_init__(self):
@@ -21,6 +22,8 @@ class ReturnmapOption:
             self.labels = []
         for _ in range(self.A.shape[0]-len(self.labels)):
             self.labels.append(LabelOption())
+        if self.end_index == None:
+            self.end_index = self.A.shape[1]
 
     def plot(self, ax: plt.Axes):
         ax.set_title(self.title)

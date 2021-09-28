@@ -46,9 +46,9 @@ def fastica_report(dataset: Dataset):
     p.pprint(inner_matrix(Y))
 
     pltOps = [
-        PlotOption(S, title="source", labels=labels),
-        PlotOption(X, title="mixed"),
-        PlotOption(Y, title="reconstruct")
+        PlotOption(S, title="source", labels=labels, end_index=1000),
+        PlotOption(X, title="mixed", end_index=1000),
+        PlotOption(Y, title="reconstruct", end_index=1000)
     ]
     # グラフの作成
     fig, ax = plt.subplots(len(pltOps), 1)
@@ -61,9 +61,9 @@ def fastica_report(dataset: Dataset):
     fig.savefig(f"out/fastica/{key}_p.png")
 
     retOps = [
-        ReturnmapOption(S, title="source", labels=labels),
-        ReturnmapOption(X, title="mixed"),
-        ReturnmapOption(Y, title="recnstruct"),
+        ReturnmapOption(S, title="source", labels=labels, end_index=1000),
+        ReturnmapOption(X, title="mixed", end_index=1000),
+        ReturnmapOption(Y, title="recnstruct", end_index=1000),
     ]
     # リターンマップの作成
     fig, ax = plt.subplots(1, len(retOps))
@@ -78,7 +78,14 @@ def fastica_report(dataset: Dataset):
     f.close()
 
 if __name__ == '__main__':
-    fastica_report(DATADICT["isin_1000"])
-    fastica_report(DATADICT["sqrtsin_1000"])
-    fastica_report(DATADICT["sin2_chebyt2_1000"])
-    fastica_report(DATADICT["chebyt2-5_1000"])
+    # fastica_report(DATADICT["isin_1000"])
+    # fastica_report(DATADICT["sqrtsin_1000"])
+    # fastica_report(DATADICT["sin2_chebyt2_1000"])
+    # fastica_report(DATADICT["chebyt2-5_1000"])
+    # fastica_report(DATADICT["chebyt10_1000"])
+    # fastica_report(DATADICT["sin+x_1000"])
+    # fastica_report(DATADICT["sin+2x_1000"])
+    # fastica_report(DATADICT["A*sin_1000"])
+    # fastica_report(DATADICT["Adiv2*sin_1000"])    
+    # fastica_report(DATADICT["Adiv2*sin_5000"])    
+    fastica_report(DATADICT["A*sqrtsin_1000"])

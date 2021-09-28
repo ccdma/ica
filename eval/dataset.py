@@ -65,7 +65,7 @@ DATALIST = [
         ]
     ),
     Dataset(
-        key="chebyt2-5",
+        key="chebyt2-5_1000",
         S=concat(
             [chebyt_series(i+2, np.random.rand()*2-1, 1000) for i in range(4)],
         ),
@@ -75,7 +75,56 @@ DATALIST = [
             LabelOption(label="T4"),
             LabelOption(label="T5"),
         ]
-    )
+    ),
+    Dataset(
+        key="chebyt10_1000",
+        S=concat(
+            [chebyt_series(i+2, np.random.rand()*2-1, 1000) for i in range(10)],
+        ),
+        labels=[ LabelOption(label=f"T{i+2}") for i in range(10)]
+    ),
+    Dataset(
+        key="sin+x_1000",
+        S=concat(
+            [[np.sin(j/10/(i+1))+j/1000 for j in range(1000)] for i in range(4)]
+        ),
+        labels=[LabelOption(label=f"sin[x/(10*{i+1})]+x/1000") for i in range(4)],
+    ),
+    Dataset(
+        key="sin+2x_1000",
+        S=concat(
+            [[np.sin(j/10/(i+1))+j/500 for j in range(1000)] for i in range(4)]
+        ),
+        labels=[LabelOption(label=f"sin[x/(10*{i+1})]+x/500") for i in range(4)],
+    ),
+    Dataset(
+        key="A*sin_1000",
+        S=concat(
+            [[(i+1)*np.sin(j/10/(i+1)) for j in range(1000)] for i in range(4)]
+        ),
+        labels=[LabelOption(label=f"sin[x/(10*{i+1})]*{i+1}") for i in range(4)],
+    ),
+    Dataset(
+        key="Adiv2*sin_1000",
+        S=concat(
+            [[(i+1)/2*np.sin(j/10/(i+1)) for j in range(1000)] for i in range(4)]
+        ),
+        labels=[LabelOption(label=f"sin[x/(10*{i+1})]*{(i+1)/2}") for i in range(4)],
+    ),
+    Dataset(
+        key="Adiv2*sin_5000",
+        S=concat(
+            [[(i+1)/2*np.sin(j/10/(i+1)) for j in range(5000)] for i in range(4)]
+        ),
+        labels=[LabelOption(label=f"sin[x/(10*{i+1})]*{(i+1)/2}") for i in range(4)],
+    ),
+    Dataset(
+        key="A*sqrtsin_1000",
+        S=concat(
+            [[(i+1)*np.sin(j/10/np.sqrt(i+1)) for j in range(1000)] for i in range(4)]
+        ),
+        labels=[LabelOption(label=f"sin[x/(10√1)]*{i+1}") for i in range(4)],
+    ),
 ]
 
 DATADICT = {}
