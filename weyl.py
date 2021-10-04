@@ -24,7 +24,7 @@ for point in range(4):
     for num in range(1000):
         s.append(weyl(num, low_k, delta_k))
 W = np.array(S)
-N = W.shape[1]
+N = int(W.shape[1]/2)
 
 def C(i, k, l, W=W):
     if abs(l) >= N:
@@ -40,4 +40,5 @@ def C(i, k, l, W=W):
             _sum += np.conjugate(W[i, n]) * W[k, n-l]
         return _sum
 
-p.print(C(3,2,1))
+theta = lambda i, k, l : C(i, k, l) + C(i, k, N-l)
+p.print(theta(2,1,1))
