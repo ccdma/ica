@@ -1,11 +1,13 @@
 from numpy.random import rand
 from eval.log import Printer
 import numpy as np
+import numpy.linalg as la
+from eval.operation import theta_matrix
 
 from eval.seed import weyl_series
 
 np.set_printoptions(precision=4)
-np.set_printoptions(suppress=True)
+np.set_printoptions(suppress=True, linewidth=1000)
 np.random.seed(seed=4)
 
 p = Printer.with_sysout()
@@ -28,5 +30,6 @@ def C(i, k, l, S=S):
             _sum += np.conjugate(S[i, n]) * S[k, n-l]
         return _sum
 
-theta = lambda i, k, l : C(i, k, l) + C(i, k, N-l)
-p.print(theta(2,1,1))
+theta = lambda i, k, l : C(i, k, l) + C(i, k, l-N)
+p.pprint(theta_matrix(S, 2))
+p.pprint(theta(3, 3, 2))
