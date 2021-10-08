@@ -1,7 +1,6 @@
 from eval.dataset import DATADICT, Dataset
-from io import BytesIO
-from eval.report import Printer
-from eval.plot import LabelOption, PlotOption, ReturnmapOption
+from eval.log import Printer
+from eval.plot import PlotOption, ReturnmapOption
 from algorithm.fastica import fast_ica
 from eval.product import inner_matrix
 from eval.seed import chebyt_series, concat, mixed_matrix

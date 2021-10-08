@@ -1,6 +1,6 @@
 from numpy.random import rand
 from eval.product import inner_matrix
-from eval.report import Printer
+from eval.log import Printer
 import numpy.linalg as la
 import numpy as np
 

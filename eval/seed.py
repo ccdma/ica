@@ -15,6 +15,18 @@ def chebyt_series(deg: int, a0: float, length: int) -> np.ndarray:
     return np.array(result) 
 
 """
+ワイル系列を生成
+return ndarray(dtype=complex)
+"""
+def weyl_series(low_k: float, delta_k: float, length: int) -> np.ndarray:
+    result = []
+    for n in range(length):
+        x_raw = n*low_k + delta_k
+        x = x_raw - np.floor(x_raw)
+        result.append(np.exp(2 * np.pi * 1j * x))
+    return np.array(result)
+
+"""
 -0.5~+0.5なる混合行列を作成
 size: 正方行列のサイズ
 """
