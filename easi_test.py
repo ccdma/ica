@@ -1,8 +1,8 @@
 from algorithm.easi import EASI
 from eval.dataset import DATADICT, Dataset
-from eval.report import Printer
+from eval.log import Printer
 from eval.plot import PlotOption, ReturnmapOption
-from eval.product import inner_matrix
+from eval.operation import inner_matrix
 from eval.seed import mixed_matrix
 import numpy as np
 import matplotlib.pyplot as plt

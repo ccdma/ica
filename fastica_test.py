@@ -2,8 +2,8 @@ from eval.dataset import DATADICT, Dataset
 from eval.log import Printer
 from eval.plot import PlotOption, ReturnmapOption
 from algorithm.fastica import fast_ica
-from eval.product import inner_matrix
-from eval.seed import chebyt_series, concat, mixed_matrix
+from eval.operation import inner_matrix
+from eval.seed import mixed_matrix
 import numpy as np
 import matplotlib.pyplot as plt
 import sys

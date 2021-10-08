@@ -1,5 +1,6 @@
 import dataclasses as d
-from eval.seed import chebyt_series, concat
+from eval.operation import concat
+from eval.seed import chebyt_series
 from eval.plot import LabelOption
 from typing import List
 import numpy as np
