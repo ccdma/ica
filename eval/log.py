@@ -8,7 +8,7 @@ class Printer:
         self._ios = ios
 
     @staticmethod
-    def with_sysout(*ios: List[BytesIO]):
+    def with_stdout(*ios: List[BytesIO]):
         return Printer(sys.__stdout__, *ios)
 
     def pprint(self, object: object):

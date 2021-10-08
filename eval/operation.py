@@ -3,18 +3,18 @@ import numpy as np
 """
 2つの行ごとの内積を計算し、行列にまとめます
 """
-def inner_matrix(P: np.ndarray) -> np.ndarray:
+def correlation(P: np.ndarray) -> np.ndarray:
     res = np.eye(P.shape[0], dtype=P.dtype)
     for i in range(P.shape[0]):
         for j in range(P.shape[0]):
             res[i][j] = (P[i]@P[j]) / P.shape[1]
     return res
 
-def theta_matrix(P: np.ndarray, l: int):
+def periodic_correlation(P: np.ndarray, l: int):
     N = int(P.shape[1]/2)
     return matrixC(P, l) + matrixC(P, l-N)
 
-def theta_hat_matrix(P: np.ndarray, l: int):
+def odd_periodic_correlation(P: np.ndarray, l: int):
     N = int(P.shape[1]/2)
     return matrixC(P, l) - matrixC(P, l-N)
 

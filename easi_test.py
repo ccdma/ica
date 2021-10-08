@@ -2,7 +2,7 @@ from algorithm.easi import EASI
 from eval.dataset import DATADICT, Dataset
 from eval.log import Printer
 from eval.plot import PlotOption, ReturnmapOption
-from eval.operation import inner_matrix
+from eval.operation import correlation
 from eval.seed import mixed_matrix
 import numpy as np
 import matplotlib.pyplot as plt
@@ -44,11 +44,11 @@ def easi_report(dataset: Dataset):
     p.pprint(A)
 
     p.print("inner(S):")
-    p.pprint(inner_matrix(S))
+    p.pprint(correlation(S))
     p.print("inner(X):")
-    p.pprint(inner_matrix(X))
+    p.pprint(correlation(X))
     p.print("inner(Y):")
-    p.pprint(inner_matrix(Y))
+    p.pprint(correlation(Y))
 
     start_index = SERIES-min(500, SERIES)
 
