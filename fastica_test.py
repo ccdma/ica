@@ -73,7 +73,7 @@ def fastica_report(dataset: Dataset):
     fig.set_figheight(5)
     fig.set_figwidth(12)
     fig.savefig(f"out/fastica/{key}_r.png")
-
+    # plt.show()
     f.close()
 
 if __name__ == '__main__':
