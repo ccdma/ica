@@ -41,8 +41,9 @@ def fast_ica(X: np.ndarray, _assert: bool=True) -> FastICAResult:
     if _assert:
         assert np.allclose(np.cov(X_whiten), np.eye(X_whiten.shape[0]), atol=1.e-10) # 無相関化を確認（単位行列）
 
+    beta = 2.001953125
     # ICAに使用する関数gとその微分g2（ここではgは４次キュムラント）
-    g = lambda bx : np.tanh(bx) 
+    g = lambda bx : beta + np.tanh(bx) 
     g2 = lambda bx : 1+np.tanh(bx)
 
     I = X_whiten.shape[0]
