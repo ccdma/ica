@@ -76,7 +76,7 @@ def fast_ica(X: np.ndarray, _assert: bool=True) -> FastICAResult:
     if _assert:
         assert np.allclose(B @ np.conjugate(B.T), np.eye(B.shape[0]), atol=1.e-10) # Bが直交行列となっていることを検証
 
-    Y = B.T @ X_whiten
+    Y = np.conjugate(B.T) @ X_whiten
 
     return FastICAResult(Y)
 
