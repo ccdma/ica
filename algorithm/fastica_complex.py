@@ -58,10 +58,13 @@ def fast_ica(X: np.ndarray, _assert: bool=True) -> FastICAResult:
     for i in range(I):
         for j in range(1000):
             prevBi = B[:,i].copy()
-            Bih = np.conjugate(B[:,i].T)
+            BiH = np.conjugate(B[:,i].T)
             result = []
             for x in X_whiten.T:
-                result.append(g(x @ B[:,i])*x - g2(x @ B[:,i])*B[:,i])
+                BiHx = BiH@x
+                BiHx2 = np.norm(BiHx, ord=2)
+                row = x@BiHx*g(BiHx2) - (g(BiHx2)+BiHx2*g2(BiHx2))@B[:,i]
+                result.append(row)
             B[:,i] = np.average(result, axis=0) # 不動点法
             B[:,i] = B[:,i] - B[:,:i] @ B[:,:i].T @ B[:,i] # 直交空間に射影
             B[:,i] = B[:,i] / la.norm(B[:,i], ord=2) # L2ノルムで規格化
