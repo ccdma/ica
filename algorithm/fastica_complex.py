@@ -63,15 +63,15 @@ def fast_ica(X: np.ndarray, _assert: bool=True) -> FastICAResult:
             for x in X_whiten.T:
                 BiHx = BiH@x
                 BiHx2 = abs(BiHx)**2
-                row = x * BiHx*g(BiHx2) - (g(BiHx2)+BiHx2*g2(BiHx2)) * B[:,i]
+                row = x*np.conjugate(BiHx)*g(BiHx2) - (g(BiHx2)+BiHx2*g2(BiHx2))*B[:,i]
                 result.append(row)
             B[:,i] = np.average(result, axis=0) # 不動点法
             B[:,i] = B[:,i] - B[:,:i] @ np.conjugate(B[:,:i].T) @ B[:,i] # 直交空間に射影
             B[:,i] = B[:,i] / la.norm(B[:,i], ord=2) # L2ノルムで規格化
+            print(abs(prevBi @ B[:,i]))
             if 1.0 - 1.e-8 < abs(prevBi @ B[:,i]) < 1.0 + 1.e-8: # （内積1 <=> ほとんど変更がなければ）
                 break
         else:
-            pass
             assert False
     if _assert:
         assert np.allclose(B @ np.conjugate(B.T), np.eye(B.shape[0]), atol=1.e-10) # Bが直交行列となっていることを検証
