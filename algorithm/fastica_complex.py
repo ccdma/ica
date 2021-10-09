@@ -31,15 +31,15 @@ def fast_ica(X: np.ndarray, _assert: bool=True) -> FastICAResult:
 
     # 固有値分解により、白色化されたX_whitenを計算する
     lambdas, P = la.eig(np.cov(X_center))
-    if _assert:
-        assert np.allclose(np.cov(X_center), P @ np.diag(lambdas) @ P.T) # 固有値分解の検証
+    # if _assert:
+    #     assert np.allclose(np.cov(X_center), P @ np.diag(lambdas) @ P.T) # 固有値分解の検証
     for i in reversed(np.where(lambdas < 1.e-12)[0]): # 極めて小さい固有値は削除する
         lambdas = np.delete(lambdas, i, 0)
         P = np.delete(P, i, 1)
     Atilda = la.inv(np.sqrt(np.diag(lambdas))) @ P.T # 球面化行列
     X_whiten = Atilda @ X_center
-    if _assert:
-        assert np.allclose(np.cov(X_whiten), np.eye(X_whiten.shape[0]), atol=1.e-10) # 無相関化を確認（単位行列）
+    # if _assert:
+    #     assert np.allclose(np.cov(X_whiten), np.eye(X_whiten.shape[0]), atol=1.e-10) # 無相関化を確認（単位行列）
 
     # ICAに使用する関数gとその微分g2（ここではgは４次キュムラント）
     g = lambda bx : bx**3
@@ -62,8 +62,8 @@ def fast_ica(X: np.ndarray, _assert: bool=True) -> FastICAResult:
             result = []
             for x in X_whiten.T:
                 BiHx = BiH@x
-                BiHx2 = np.norm(BiHx, ord=2)
-                row = x@BiHx*g(BiHx2) - (g(BiHx2)+BiHx2*g2(BiHx2))@B[:,i]
+                BiHx2 = abs(BiHx)**2
+                row = x * BiHx*g(BiHx2) - (g(BiHx2)+BiHx2*g2(BiHx2)) * B[:,i]
                 result.append(row)
             B[:,i] = np.average(result, axis=0) # 不動点法
             B[:,i] = B[:,i] - B[:,:i] @ B[:,:i].T @ B[:,i] # 直交空間に射影
