@@ -48,6 +48,8 @@ def fast_ica(X: np.ndarray, _assert: bool=True) -> FastICAResult:
     # ICAに使用する関数gとその微分g2（ここではgは４次キュムラント）
     g = lambda bx : beta + np.tanh(bx) 
     g2 = lambda bx : 1+np.tanh(bx)
+    g = lambda bx : bx**3
+    g2 = lambda bx : 3*(bx**2)
 
     I = X_whiten.shape[0]
     B = np.array([[(np.random.rand()-0.5)+(np.random.rand()-0.5)*1j for i in range(I)] for j in range(I) ], dtype=np.complex) # X_whitenからYへの復元行列
@@ -72,7 +74,7 @@ def fast_ica(X: np.ndarray, _assert: bool=True) -> FastICAResult:
             B[:,i] = np.average(result, axis=0) # 不動点法
             B[:,i] = B[:,i] - B[:,:i] @ H(B[:,:i]) @ B[:,i] # 直交空間に射影
             B[:,i] = B[:,i] / la.norm(B[:,i], ord=2) # L2ノルムで規格化
-            print(abs(prevBi @ B[:,i]))
+            print(prevBi @ B[:,i])
             if 1.0 - 1.e-8 < abs(prevBi @ B[:,i]) < 1.0 + 1.e-8: # （内積1 <=> ほとんど変更がなければ）
                 break
         else:
