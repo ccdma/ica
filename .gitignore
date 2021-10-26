@@ -1,4 +1,4 @@
 .vscode/*
-*.pyc
+**/__pycache__/*.pyc
 out.mp3
 **/.DS_Store
