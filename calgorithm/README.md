@@ -7,7 +7,7 @@ $ sudo apt install libeigen3-dev
 ## compile
 
 ```
-$ g++ ica.cpp -I /usr/include/eigen3/ -fopenmp -lblas  
+$ g++ ica.cpp -I /usr/include/eigen3/ -fopenmp  
 ```
 - `-O3 -mtune=native -march=native`は最適化系のオプション
 - `-lblas`でblas利用（eigenのinclude前に`#define EIGEN_USE_BLAS`すること）
