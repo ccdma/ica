@@ -3,6 +3,7 @@
 #include <vector>
 #include <random>
 #include <cmath>
+#include <sstream>
 #include <eigen3/Eigen/Dense>
 using std::vector;
 using std::srand;
@@ -84,6 +85,22 @@ namespace ICA {
 
         return FastICAResult{Y};
     };
+    
+    std::vector<double> ToStdVec(Vector& v1){
+      vector<double> v2(v1.data(), v1.data() + v1.size());
+      return v2;
+    }
+
+    void WriteMatrix(std::stringstream& ss, Matrix& mat){
+      const auto sample = mat.rows();
+      const auto series = mat.cols();
+      for (int i=0; i<sample; i++){
+        for (int j=0;j<series;j++){
+          ss << mat(i,j) << ",";
+        }
+        ss << std::endl;
+      }
+    }
 }
 
 int main(){
@@ -97,29 +114,18 @@ int main(){
     }
   }
   const ICA::Matrix A = ICA::Matrix::Random(sample, sample);
-  const ICA::Matrix X = A * S;
-  const auto result = ICA::FastICA(X);
+  ICA::Matrix X = A * S;
+  auto result = ICA::FastICA(X);
+
+  std::stringstream ss;
+  ICA::WriteMatrix(ss, S);
+  ss << std::endl;
+  ICA::WriteMatrix(ss, X);
+  ss << std::endl;
+  ICA::WriteMatrix(ss, result.Y);
+
   std::ofstream outputfile("test.txt");
-  for (int i=0; i<sample; i++){
-    for (int j=0;j<series;j++){
-      outputfile << S(i,j) << ",";
-    }
-    outputfile << std::endl;
-  }
-  outputfile << std::endl;
-  for (int i=0; i<sample; i++){
-    for (int j=0;j<series;j++){
-      outputfile << X(i,j) << ",";
-    }
-    outputfile << std::endl;
-  }
-  outputfile << std::endl;
-  for (int i=0; i<sample; i++){
-    for (int j=0;j<series;j++){
-      outputfile << result.Y(i,j) << ",";
-    }
-    outputfile << std::endl;
-  }
+  outputfile << ss.rdbuf();
   outputfile.close();
   return 0;
 }
