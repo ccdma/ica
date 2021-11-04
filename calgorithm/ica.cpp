@@ -70,7 +70,7 @@ namespace ICA {
             const auto collen = X_whiten.cols();
             Matrix ave(I, collen);
             for(int k=0; k<collen; k++){
-              const Vector x = B.col(k);
+              const Vector x = X_whiten.col(k);
               ave.col(k) = g(x.dot(B.col(i)))*x - g2(x.dot(B.col(i)))*B.col(i);  
             }
             B.col(i) = ave.rowwise().mean();
