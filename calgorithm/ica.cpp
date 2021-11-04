@@ -8,7 +8,7 @@
 using std::vector;
 using std::srand;
 
-#define DEBUG true
+#define DEBUG false
 #define LOOP 1000
 
 namespace ICA {
@@ -71,6 +71,7 @@ namespace ICA {
 
             const auto collen = X_whiten.cols();
             Matrix ave(I, collen);
+            #pragma omp parallel for
             for(int k=0; k<collen; k++){
               const Vector x = X_whiten.col(k);
               ave.col(k) = g(x.dot(B.col(i)))*x - g2(x.dot(B.col(i)))*B.col(i);  
@@ -79,6 +80,7 @@ namespace ICA {
             Normalize(B, i);
             const auto diff = std::abs(prevBi.dot(B.col(i)));
             if (1.0 - 1.e-8 < diff && diff < 1.0 + 1.e-8) break;
+            if (j==LOOP) printf("[WARN] loop limit exceeded");
           }
         }
         Matrix Y = B.transpose() * X_whiten;
@@ -105,8 +107,8 @@ namespace ICA {
 
 int main(){
   srand(0);
-  const auto sample = 5;
-  const auto series = 1000;
+  const auto sample = 4;
+  const auto series = 10000;
   ICA::Matrix S(sample,series);
   for (int i=0; i<sample; i++){
     for (int j=0;j<series;j++){
