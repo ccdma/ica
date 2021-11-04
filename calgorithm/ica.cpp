@@ -7,6 +7,7 @@ using std::vector;
 using std::srand;
 
 #define DEBUG true
+#define LOOP 1000
 
 namespace ICA {
 
@@ -60,6 +61,27 @@ namespace ICA {
         }
 
         if(DEBUG) std::cout << B * B.transpose() << std::endl;
+
+        std::cout << B << std::endl;
+        std::cout << B.colwise().sum() << std::endl;
+
+        for(int i=0; i<I; i++){
+          for(int j=0; j<LOOP; j++){
+            // 値のコピー
+            const Vector prevBi = B.col(i);
+
+            const auto collen = X_whiten.cols();
+            Matrix ave(I, collen);
+            for(int k=0; k<collen; k++){
+              const Vector x = B.col(k);
+              ave.col(k) = g(x.dot(B.col(i)))*x - g2(x.dot(B.col(i)))*B.col(i);  
+            }
+            B.col(i) = ave.rowwise().mean();
+            Normalize(B, i);
+            const auto diff = std::abs(prevBi.dot(B.col(i)));
+            if (1.0 - 1.e-8 < diff && diff < 1.0 + 1.e-8) break;
+          }
+        }
         
         // const auto eval = X_whiten.data();
         return FastICAResult{X};
