@@ -62,9 +62,6 @@ namespace ICA {
 
         if(DEBUG) std::cout << B * B.transpose() << std::endl;
 
-        std::cout << B << std::endl;
-        std::cout << B.colwise().sum() << std::endl;
-
         for(int i=0; i<I; i++){
           for(int j=0; j<LOOP; j++){
             // 値のコピー
