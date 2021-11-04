@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <random>
+#include <cmath>
 #include <eigen3/Eigen/Dense>
 using std::vector;
 using std::srand;
@@ -12,7 +13,7 @@ namespace ICA {
     using Matrix = Eigen::MatrixXd;
     using Vector = Eigen::VectorXd;
 
-    Matrix MixMatrix(int size){
+    Matrix RandMatrix(int size){
       return Matrix::Random(size, size);
     };
 
@@ -37,6 +38,12 @@ namespace ICA {
 
         // 単位行列であることを確認
         if (DEBUG) std::cout << (X_whiten * X_whiten.transpose()) / double(X_whiten.cols() - 1) << std::endl;
+
+        const auto g = [](double bx) { return std::pow(bx, 3); };
+        const auto g2 = [](double bx) { return 3*std::pow(bx, 2); };
+
+        const auto I = X_whiten.rows();
+        const auto B = RandMatrix(I);
         
         // const auto eval = X_whiten.data();
         return FastICAResult{X};
