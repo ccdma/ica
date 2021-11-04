@@ -4,9 +4,13 @@
 #include <random>
 #include <cmath>
 #include <sstream>
+
+// #define EIGEN_USE_BLAS
+
 #include <eigen3/Eigen/Dense>
 using std::vector;
 using std::srand;
+
 
 #define DEBUG false
 #define LOOP 1000
@@ -108,7 +112,7 @@ namespace ICA {
 int main(){
   srand(0);
   const auto sample = 4;
-  const auto series = 10000;
+  const auto series = 100000;
   ICA::Matrix S(sample,series);
   for (int i=0; i<sample; i++){
     for (int j=0;j<series;j++){
