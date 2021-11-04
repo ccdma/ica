@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <random>
-#include <eigen3/Eigen/Core>
+#include <eigen3/Eigen/Dense>
 using std::vector;
 using std::srand;
 
@@ -14,12 +14,6 @@ namespace ICA {
       return Matrix::Random(size, size);
     };
 
-    Matrix Cov(Matrix mat){
-      Matrix centered = mat.rowwise() - mat.colwise().mean();
-      Matrix cov = (centered.adjoint() * centered) / double(mat.rows() - 1);
-      return cov;
-    }
-
     struct FastICAResult {
         Matrix Y;
     };
@@ -28,13 +22,20 @@ namespace ICA {
         const auto sample = X.rows();
         const auto series = X.cols();
         
-        Matrix X_mean = Matrix(sample, series);
-        for (int i=0; i<sample; i++){
-          X_mean.row(i).setConstant(X.col(i).mean());
-        }
-        const Matrix X_center = X - X_mean;
+        const Matrix X_center = X.colwise() - X.rowwise().mean();
+        const Matrix X_cov = (X_center * X_center.transpose()) / double(X_center.cols() - 1);
 
-        const auto eval = X_center.data();
+        Eigen::SelfAdjointEigenSolver<Matrix> es(X_cov);
+        if (es.info() != Eigen::Success) abort();
+
+        Vector lambdas = es.eigenvalues().real();
+        Matrix P = es.eigenvectors().real();
+        Matrix Atilda = lambdas.cwiseSqrt().asDiagonal().inverse() * P.transpose();
+        Matrix X_whiten = Atilda * X_center;
+
+        std::cout << X_whiten << std::endl;
+        
+        // const auto eval = X_whiten.data();
         return FastICAResult{X};
     };
 }
@@ -48,7 +49,7 @@ int main(){
   m(1,1) = m(1,0) + m(0,1);
   std::cout << m << std::endl;
 
-  const ICA::Matrix mmm = ICA::Matrix::Random(3, 10);
+  const ICA::Matrix mmm = ICA::Matrix::Random(2, 3);
   ICA::FastICA(mmm);
   return 0;
 }
