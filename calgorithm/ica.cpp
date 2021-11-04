@@ -126,7 +126,7 @@ int main(){
   ss << std::endl;
   ICA::WriteMatrix(ss, result.Y);
 
-  std::ofstream outputfile("test.txt");
+  std::ofstream outputfile("test.csv");
   outputfile << ss.rdbuf();
   outputfile.close();
   return 0;
