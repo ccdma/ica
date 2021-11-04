@@ -1,3 +1,4 @@
+from matplotlib.pyplot import xcorr
 import numpy.linalg as la
 import numpy as np
 import dataclasses
@@ -11,6 +12,8 @@ class FastICAResult:
     #    [y_1(0), y_1(1), y_1(2)]]
     #   s.t. y_point(time)
     Y: np.ndarray
+    X_whiten: np.ndarray
+    X_center: np.ndarray
 
 """
 X: represents observed data
@@ -71,7 +74,7 @@ def fast_ica(X: np.ndarray, _assert: bool=True) -> FastICAResult:
 
     Y = B.T @ X_whiten
 
-    return FastICAResult(Y)
+    return FastICAResult(Y, X_whiten=X_whiten, X_center=X_center)
 
 # ica = FastICA(n_components=SERIES, random_state=0)
 # _Y = ica.fit_transform(X.T).T * 8

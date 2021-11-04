@@ -28,6 +28,16 @@ class Dataset:
         return Dataset(key=key, S=S, labels=labels)
 
 DATALIST = [
+    Dataset(
+        key="2sin_1000",
+        S=concat(
+            [[np.sin(j/10/(i+2))+i for j in range(1000)] for i in range(2)]
+        ),
+        labels=[
+            LabelOption(label="sin[x/(10*2)]"),
+            LabelOption(label="sin[x/(10*3)]+1")
+        ],
+    ),
 # 1000点づつのデータ
     Dataset(
         key="isin_1000",
