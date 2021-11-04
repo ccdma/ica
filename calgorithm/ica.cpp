@@ -5,6 +5,8 @@
 using std::vector;
 using std::srand;
 
+#define DEBUG true
+
 namespace ICA {
 
     using Matrix = Eigen::MatrixXd;
@@ -33,7 +35,8 @@ namespace ICA {
         Matrix Atilda = lambdas.cwiseSqrt().asDiagonal().inverse() * P.transpose();
         Matrix X_whiten = Atilda * X_center;
 
-        std::cout << X_whiten << std::endl;
+        // 単位行列であることを確認
+        if (DEBUG) std::cout << (X_whiten * X_whiten.transpose()) / double(X_whiten.cols() - 1) << std::endl;
         
         // const auto eval = X_whiten.data();
         return FastICAResult{X};
