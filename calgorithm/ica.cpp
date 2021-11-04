@@ -111,8 +111,8 @@ namespace ICA {
 
 int main(){
   srand(0);
-  const auto sample = 4;
-  const auto series = 100000;
+  const auto sample = 100;
+  const auto series = 10000;
   ICA::Matrix S(sample,series);
   for (int i=0; i<sample; i++){
     for (int j=0;j<series;j++){
