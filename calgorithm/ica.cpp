@@ -19,12 +19,12 @@ namespace ICA {
 
     // 正方行列でなくてはいけない
     // i番目を直行空間に射影
-    void Normalize(Matrix mat, int i){
+    void Normalize(Matrix& mat, int i){
       const auto size = mat.cols();
       if (i>0){
-        mat.col(i) = mat.col(i) - mat.block(0, 0, size, i+1) * mat.block(0, 0, size, i+1).transpose() * mat.col(i);
+        mat.col(i) = mat.col(i) - mat.block(0, 0, size, i) * mat.block(0, 0, size, i).transpose() * mat.col(i);
       }
-      mat.col(i) = mat.col(i) / mat.col(i).squaredNorm();
+      mat.col(i) = mat.col(i) / std::sqrt(mat.col(i).squaredNorm());
     }
 
     struct FastICAResult {
@@ -53,10 +53,9 @@ namespace ICA {
         const auto g2 = [](double bx) { return 3*std::pow(bx, 2); };
 
         const auto I = X_whiten.rows();
-        const auto B = RandMatrix(I);
+        auto B = RandMatrix(I);
 
         for(int i=0; i<I; i++){
-          std::cout << B << std::endl;
           Normalize(B, i);
         }
 
