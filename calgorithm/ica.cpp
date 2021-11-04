@@ -30,7 +30,7 @@ namespace ICA {
     }
 
     struct FastICAResult {
-        Matrix& Y;
+        Matrix Y;
     };
 
     FastICAResult FastICA(const Matrix& X) {
@@ -93,7 +93,7 @@ int main(){
   ICA::Matrix S(sample,series);
   for (int i=0; i<sample; i++){
     for (int j=0;j<series;j++){
-      S(i,j) = std::sin((i+2)*(double)j*0.1);
+      S(i,j) = std::sin((i+2)*(double)j*0.02);
     }
   }
   const ICA::Matrix A = ICA::Matrix::Random(sample, sample);
@@ -102,7 +102,7 @@ int main(){
   std::ofstream outputfile("test.txt");
   for (int i=0; i<sample; i++){
     for (int j=0;j<series;j++){
-      outputfile << S(i,j) << ",";
+      outputfile << X(i,j) << ",";
     }
     outputfile << std::endl;
   }
