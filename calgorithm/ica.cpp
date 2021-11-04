@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <random>
 #include <cmath>
@@ -29,10 +30,10 @@ namespace ICA {
     }
 
     struct FastICAResult {
-        Matrix Y;
+        Matrix& Y;
     };
 
-    FastICAResult FastICA(const Matrix X) {
+    FastICAResult FastICA(const Matrix& X) {
         const auto sample = X.rows();
         const auto series = X.cols();
         
@@ -79,22 +80,32 @@ namespace ICA {
             if (1.0 - 1.e-8 < diff && diff < 1.0 + 1.e-8) break;
           }
         }
-        
-        // const auto eval = X_whiten.data();
-        return FastICAResult{X};
+        Matrix Y = B.transpose() * X_whiten;
+
+        return FastICAResult{Y};
     };
 }
 
 int main(){
   srand(0);
-  Eigen::MatrixXd m(2,2);
-  m(0,0) = 3;
-  m(1,0) = 2.5;
-  m(0,1) = -1;
-  m(1,1) = m(1,0) + m(0,1);
-  std::cout << m << std::endl;
-
-  const ICA::Matrix mmm = ICA::Matrix::Random(2, 3);
-  ICA::FastICA(mmm);
+  const auto sample = 2;
+  const auto series = 1000;
+  ICA::Matrix S(sample,series);
+  for (int i=0; i<sample; i++){
+    for (int j=0;j<series;j++){
+      S(i,j) = std::sin((i+2)*(double)j*0.1);
+    }
+  }
+  const ICA::Matrix A = ICA::Matrix::Random(sample, sample);
+  const ICA::Matrix X = A * S;
+  const auto result = ICA::FastICA(X);
+  std::ofstream outputfile("test.txt");
+  for (int i=0; i<sample; i++){
+    for (int j=0;j<series;j++){
+      outputfile << S(i,j) << ",";
+    }
+    outputfile << std::endl;
+  }
+  outputfile.close();
   return 0;
 }
