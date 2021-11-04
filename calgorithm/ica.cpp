@@ -88,7 +88,7 @@ namespace ICA {
 
 int main(){
   srand(0);
-  const auto sample = 2;
+  const auto sample = 5;
   const auto series = 1000;
   ICA::Matrix S(sample,series);
   for (int i=0; i<sample; i++){
@@ -102,7 +102,21 @@ int main(){
   std::ofstream outputfile("test.txt");
   for (int i=0; i<sample; i++){
     for (int j=0;j<series;j++){
+      outputfile << S(i,j) << ",";
+    }
+    outputfile << std::endl;
+  }
+  outputfile << std::endl;
+  for (int i=0; i<sample; i++){
+    for (int j=0;j<series;j++){
       outputfile << X(i,j) << ",";
+    }
+    outputfile << std::endl;
+  }
+  outputfile << std::endl;
+  for (int i=0; i<sample; i++){
+    for (int j=0;j<series;j++){
+      outputfile << result.Y(i,j) << ",";
     }
     outputfile << std::endl;
   }
