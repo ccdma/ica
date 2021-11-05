@@ -1,13 +1,13 @@
 ## dependency installation
 
 ```
-$ sudo apt install libeigen3-dev
+$ sudo apt install libboost-all-dev
 ```
 
 ## compile
 
 ```
-$ g++ ica.cpp -I /usr/include/eigen3/ -fopenmp  
+$ g++ ica.cpp -I ./include/ -fopenmp  
 ```
 - `-O3 -mtune=native -march=native`は最適化系のオプション
 - `-lblas`でblas利用（eigenのinclude前に`#define EIGEN_USE_BLAS`すること）
