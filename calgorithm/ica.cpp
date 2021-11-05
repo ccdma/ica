@@ -176,7 +176,7 @@ namespace ICA {
 		return C;
 	}
 
-	// n:次数、a0：初期値、rows：n~n+rowsまでのチェビシェフ多項式を積む、len：長さ
+	// n:次数、a0：初期値、len：長さ
 	Vector ChebytSeries(const int n, const int len, const double a0){
 		Vector S(len);
 		double prev = a0;
