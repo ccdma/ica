@@ -1,3 +1,7 @@
+#define DEBUG_PROGLESS
+// #define DEBUG_MATRIX
+// #define EIGEN_USE_BLAS
+
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -6,9 +10,6 @@
 #include <chrono>
 #include <sstream>
 #include <eigen3/Eigen/Dense>
-
-#define DEBUG
-// #define EIGEN_USE_BLAS
 
 namespace ICA {
 
@@ -38,6 +39,17 @@ namespace ICA {
     };
 
     FastICAResult FastICA(const Matrix& X) {
+
+#ifdef DEBUG_PROGLESS
+        std::chrono::system_clock::time_point prev, now;
+        prev = std::chrono::system_clock::now();
+        now = std::chrono::system_clock::now();
+        std::cout 
+        << "[PROGLESS] start fastica session"
+        << "\t" << std::chrono::duration_cast<std::chrono::milliseconds>(now-prev).count() << std::endl;
+        prev = now;
+#endif
+
         std::mt19937 mt(0);
         const auto sample = X.rows();
         const auto series = X.cols();
@@ -53,7 +65,15 @@ namespace ICA {
         Matrix Atilda = lambdas.cwiseSqrt().asDiagonal().inverse() * P.transpose();
         Matrix X_whiten = Atilda * X_center;
 
-#ifdef DEBUG
+#ifdef DEBUG_PROGLESS
+        now = std::chrono::system_clock::now();
+        std::cout 
+        << "[PROGLESS] start fixed point method"
+        << "\t" << std::chrono::duration_cast<std::chrono::milliseconds>(now-prev).count() << std::endl;
+        prev = now;
+#endif
+
+#ifdef DEBUG_MATRIX
         // 単位行列であることを確認
         std::cout << (X_whiten * X_whiten.transpose()) / double(X_whiten.cols() - 1) << std::endl;
 #endif
@@ -68,7 +88,7 @@ namespace ICA {
           Normalize(B, i);
         }
 
-#ifdef DEBUG
+#ifdef DEBUG_MATRIX
         // 単位行列であることを確認
         std::cout << B * B.transpose() << std::endl;
 #endif
@@ -89,8 +109,17 @@ namespace ICA {
             Normalize(B, i);
             const auto diff = std::abs(prevBi.dot(B.col(i)));
             if (1.0 - 1.e-8 < diff && diff < 1.0 + 1.e-8) break;
-            if (j==LOOP-1) printf("[WARN] loop limit exceeded");
+            if (j==LOOP-1) printf("[WARN] loop limit exceeded\n");
           }
+
+#ifdef DEBUG_PROGLESS
+          now = std::chrono::system_clock::now();
+          std::cout
+          << "[PROGLESS] end loop " << i
+          << "\t" << std::chrono::duration_cast<std::chrono::milliseconds>(now-prev).count() << std::endl;
+          prev = now;
+#endif
+
         }
         Matrix Y = B.transpose() * X_whiten;
 
@@ -116,11 +145,13 @@ namespace ICA {
 
 int main(){
   std::mt19937 mt(10);
-  const auto sample = 3;
-  const auto series = 100;
+  const auto sample = 20;
+  const auto series = 100000;
   
   ICA::Matrix S(sample,series);
+  #pragma omp parallel for
   for (int i=0; i<sample; i++){
+    #pragma omp parallel for
     for (int j=0;j<series;j++){
       S(i,j) = std::sin((i+2)*(double)j*0.02);
     }
