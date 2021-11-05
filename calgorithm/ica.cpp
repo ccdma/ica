@@ -18,6 +18,7 @@ namespace ICA {
 	using Reng = std::mt19937; 
 
 	const int LOOP = 100;
+	const int WRITE_LIMIT = 10000;
 
 	Matrix RandMatrix(int size, Reng& engine){
 		std::uniform_real_distribution<double> distribution(-0.5, 0.5);
@@ -138,6 +139,7 @@ namespace ICA {
 		for (int i=0; i<sample; i++){
 			for (int j=0;j<series;j++){
 				ss << mat(i,j) << ",";
+				if (WRITE_LIMIT < j) break;
 			}
 			ss << std::endl;
 		}
@@ -197,8 +199,8 @@ namespace ICA {
 
 int main(){
 	ICA::Reng reng(10);
-	const auto sample = 3;
-	const auto series = 1000;
+	const auto sample = 10;
+	const auto series = 1000000;
 	
 	std::vector<ICA::Vector> s(sample);
 	#pragma omp parallel for
