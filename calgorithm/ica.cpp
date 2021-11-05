@@ -26,21 +26,31 @@ namespace ICA {
 		return Matrix::Zero(size, size).unaryExpr(generator);
 	};
 
-	// 正方行列でなくてはいけない
-	// i番目を直行空間に射影
-	void Normalize(Matrix& mat, int i){
-		const auto size = mat.cols();
+	/**
+	 * 正方行列でなくてはいけない
+	 * i番目を直行空間に射影
+	 */
+	void Normalize(Matrix& M, int i){
+		const auto size = M.cols();
 		if (i>0){
-			mat.col(i) = mat.col(i) - mat.block(0, 0, size, i) * mat.block(0, 0, size, i).transpose() * mat.col(i);
+			M.col(i) = M.col(i) - M.block(0, 0, size, i) * M.block(0, 0, size, i).transpose() * M.col(i);
 		}
-		mat.col(i) = mat.col(i) / std::sqrt(mat.col(i).squaredNorm());
+		M.col(i) = M.col(i) / std::sqrt(M.col(i).squaredNorm());
+	}
+
+	Matrix Centerize(Matrix& M){
+		return M.colwise() - M.rowwise().mean();
 	}
 
 	struct FastICAResult {
+		Matrix W;
 		Matrix Y;
 	};
 
-	FastICAResult FastICA(const Matrix& X) {
+	/**
+	 * X: 内部で中心化は行うが、すでに中心化されていることが望ましい（元信号の中心化ができていれば、混合されたXも自然と中心化されるはず）
+	 */
+	FastICAResult FastICA(Matrix& X) {
 
 #ifdef DEBUG_PROGLESS
 	std::chrono::system_clock::time_point start, prev, now;
@@ -57,7 +67,7 @@ namespace ICA {
 	const auto sample = X.rows();
 	const auto series = X.cols();
 	
-	const Matrix X_center = X.colwise() - X.rowwise().mean();
+	const Matrix X_center = Centerize(X);
 	const Matrix X_cov = (X_center * X_center.transpose()) / double(X_center.cols() - 1);
 
 	Eigen::SelfAdjointEigenSolver<Matrix> es(X_cov);
@@ -133,7 +143,7 @@ namespace ICA {
 		<< "\ttotal:" << std::chrono::duration_cast<std::chrono::milliseconds>(now-start).count() << std::endl;
 		prev = now;
 #endif
-		return FastICAResult{Y};
+		return FastICAResult{W: B.transpose()*Atilda, Y: Y};
 	};
     
 	std::vector<double> ToStdVec(Vector& v1){
@@ -153,9 +163,11 @@ namespace ICA {
 		}
 	}
 
-	// チェビシェフ多項式の値を計算
-	// オーバーフローを避けるため、漸化式を利用
-	// n: 次数(n>=0) return: T_n(x)の値
+	/**
+	 * チェビシェフ多項式の値を計算
+	 * オーバーフローを避けるため、漸化式を利用
+	 * n: 次数(n>=0) return: T_n(x)の値
+	 */
 	double EvalChebyt(const double x, const int n){
 		double t0 = 1.0;
 		double t1 = x;
@@ -173,8 +185,10 @@ namespace ICA {
 		return t2;
 	}
 
-	// 縦にベクトルを積む
-	// 必ず1つ以上を渡し、複数の場合、横幅は統一すること
+	/**
+	 * 縦にベクトルを積む
+	 * 必ず1つ以上を渡し、複数の場合、横幅は統一すること
+	 */
 	Matrix VStack(std::vector<Vector>& vecs){
 		const auto num = vecs.size();
 		Matrix C(num, vecs.at(0).size());
@@ -184,7 +198,9 @@ namespace ICA {
 		return C;
 	}
 
-	// n:次数、a0：初期値、len：長さ
+	/**
+	 * n:次数、a0：初期値、len：長さ
+	 */
 	Vector ChebytSeries(const int n, const int len, const double a0){
 		Vector S(len);
 		double prev = a0;
