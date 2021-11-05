@@ -145,6 +145,50 @@ namespace ICA {
 #endif
 		return FastICAResult{.W = B.transpose()*Atilda, .Y = Y};
 	};
+
+	class EASI {
+	
+	public:
+		ICA::Matrix B;
+
+		EASI(const int size){
+			Reng reng(0);
+			this->size = size;
+			B = RandMatrix(size, reng);
+		}
+
+		Vector update(Vector& x){
+			Matrix y = B * x;
+			Matrix V = y * y.transpose() - Matrix::Identity(size, size) + g(y) * y.transpose() - y * g(y).transpose();
+			B = B - EASI_MU * V * B;
+			return y.col(0);
+		}
+
+	private:
+
+		const double EASI_MU = 0.001953125;
+		int size;
+
+		Matrix g(Matrix y){
+			return -y.array().tanh().matrix();
+		}
+	};
+
+	struct EasiResult {
+		Matrix W;	// 復元行列
+		Matrix Y;	// 復元信号
+	};
+
+	EasiResult BatchEasi(Matrix& X) {
+		EASI easi(X.rows());
+		Matrix Y(X.rows(), X.cols());
+		for (int i=0; i<X.cols(); i++){
+			Vector x = X.col(i);
+			Vector y = easi.update(x);
+			Y.col(i) = y;
+		}
+		return EasiResult{.W = easi.B, .Y = Y};
+	}
     
 	std::vector<double> ToStdVec(Vector& v1){
 		std::vector<double> v2(v1.data(), v1.data() + v1.size());
@@ -221,10 +265,10 @@ namespace ICA {
 	}
 }
 
-int sample(){
-	ICA::Reng reng(10);
-	const auto sample = 50;
-	const auto series = 100000;
+int main(){
+	ICA::Reng reng(0);
+	const auto sample = 3;
+	const auto series = 10000;
 	
 	std::vector<ICA::Vector> s(sample);
 	#pragma omp parallel for
@@ -235,14 +279,15 @@ int sample(){
 
 	const ICA::Matrix A = ICA::RandMatrix(sample, reng);
 	ICA::Matrix X = A * S;
-	auto result = ICA::FastICA(X);
+	auto result = ICA::BatchEasi(X);
 
 	std::stringstream ss;
 	ICA::WriteMatrix(ss, S);
 	ss << std::endl;
 	ICA::WriteMatrix(ss, X);
 	ss << std::endl;
-	ICA::WriteMatrix(ss, result.Y);
+	ICA::Matrix YR = result.Y.rightCols(1000);
+	ICA::WriteMatrix(ss, YR);
 
 	std::ofstream outputfile("test.csv");
 	outputfile << ss.rdbuf();

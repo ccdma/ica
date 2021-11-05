@@ -41,7 +41,7 @@ double test(const int sample, const int series){
 
 int main(){
 	// auto sample = 3;
-	auto series = 1000;
+	auto series = 10000;
 	const auto times = 100;
 	const auto sample_max = 50;
 	for(int sample=2; sample<sample_max; sample++){
