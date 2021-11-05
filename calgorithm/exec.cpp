@@ -12,7 +12,8 @@ int main(){
 	for (int i=0; i<sample; i++){
 		s.at(i) = ICA::ChebytSeries(i+2, series, 0.2);
 	}
-	ICA::Matrix S = ICA::VStack(s);
+	ICA::Matrix noncenterS = ICA::VStack(s);
+	ICA::Matrix S = ICA::Centerize(noncenterS);
 
 	const ICA::Matrix A = ICA::RandMatrix(sample, reng);
 	ICA::Matrix X = A * S;

@@ -43,12 +43,12 @@ namespace ICA {
 	}
 
 	struct FastICAResult {
-		Matrix W;
-		Matrix Y;
+		Matrix W;	// 復元行列
+		Matrix Y;	// 復元信号
 	};
 
 	/**
-	 * X: 内部で中心化は行うが、すでに中心化されていることが望ましい（元信号の中心化ができていれば、混合されたXも自然と中心化されるはず）
+	 * X: 内部で中心化は行うが、すでに中心化されていることが望ましい（元信号Sの中心化ができていれば、混合されたXも自然と中心化されるはず）
 	 */
 	FastICAResult FastICA(Matrix& X) {
 
