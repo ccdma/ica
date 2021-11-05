@@ -1,4 +1,4 @@
-#define DEBUG_PROGLESS
+// #define DEBUG_PROGLESS
 
 #include "ica.cpp"
 
@@ -15,11 +15,9 @@ ICA::Matrix Pmatrix(ICA::Matrix& G){
 	return P;
 }
 
-int main(){
-	ICA::Reng reng(10);
-	const auto sample = 3;
-	const auto series = 1000;
-	
+double test(const int sample, const int series){
+	ICA::Reng reng(0);
+
 	std::vector<ICA::Vector> s(sample);
 	#pragma omp parallel for
 	for (int i=0; i<sample; i++){
@@ -33,16 +31,26 @@ int main(){
 	auto result = ICA::FastICA(X);
 	ICA::Matrix G = result.W * A;
 	ICA::Matrix P = Pmatrix(G);
+	ICA::Matrix S2 = P.transpose() * result.Y;
 
-	std::stringstream ss;
-	ICA::WriteMatrix(ss, S);
-	ss << std::endl;
-	ICA::WriteMatrix(ss, X);
-	ss << std::endl;
-	ICA::WriteMatrix(ss, result.Y);
+	// 平均2乗誤差
+	const double mse = (S2-S).array().pow(2).mean();
 
-	std::ofstream outputfile("test.csv");
-	outputfile << ss.rdbuf();
-	outputfile.close();
+	return mse;
+}
+
+int main(){
+	// auto sample = 3;
+	auto series = 1000;
+	const auto times = 100;
+	const auto sample_max = 10;
+	for(int sample=2; sample<sample_max; sample++){
+		double mse_sum = 0.0;
+		for (int i=0; i<times; i++){
+			mse_sum += test(sample, series);
+		}
+		std::cout << sample << "\t" << mse_sum/times << std::endl;
+	}
+
 	return 0;
 }
