@@ -15,10 +15,11 @@ namespace ICA {
 
 	using Matrix = Eigen::MatrixXd;
 	using Vector = Eigen::VectorXd;
+	using Reng = std::mt19937; 
 
 	const int LOOP = 100;
 
-	Matrix RandMatrix(int size, std::mt19937& engine){
+	Matrix RandMatrix(int size, Reng& engine){
 		std::uniform_real_distribution<double> distribution(-0.5, 0.5);
 		auto generator = [&] (double dummy) {return distribution(engine);};
 		return Matrix::Zero(size, size).unaryExpr(generator);
@@ -50,7 +51,7 @@ namespace ICA {
 	prev = now;
 #endif
 
-	std::mt19937 mt(0);
+	ICA::Reng reng(0);
 	const auto sample = X.rows();
 	const auto series = X.cols();
 	
@@ -82,7 +83,7 @@ namespace ICA {
 	const auto g2 = [](double bx) { return 3*std::pow(bx, 2); };
 
 	const auto I = X_whiten.rows();
-	auto B = RandMatrix(I, mt);
+	auto B = RandMatrix(I, reng);
 
 	for(int i=0; i<I; i++){
 		Normalize(B, i);
@@ -161,22 +162,52 @@ namespace ICA {
 		}
 		return t2;
 	}
+
+	// 縦にベクトルを積む
+	// 必ず1つ以上を渡し、複数の場合、横幅は統一すること
+	Matrix VStack(std::vector<Vector>& vecs){
+		const auto num = vecs.size();
+		Matrix C(num, vecs.at(0).size());
+		for (int i=0; i<num; i++){
+			C.row(i) = vecs.at(i);
+		}
+		return C;
+	}
+
+	// n:次数、a0：初期値、rows：n~n+rowsまでのチェビシェフ多項式を積む、len：長さ
+	Vector ChebytSeries(const int n, const int len, const double a0){
+		Vector S(len);
+		double prev = a0;
+		for (int i=0; i<len; i++){
+			S(i) = prev;
+			prev = EvalChebyt(prev, n);
+		}
+		return S;
+	}
+
+	Vector SinSeries(const double w, const int len){
+		Vector S(len);
+		const double gap = 0.1;
+		for (int i=0; i<len; i++){
+			S(i) = std::sin(w*(double)i*gap);
+		}
+		return S;
+	}
 }
 
 int main(){
-	std::mt19937 mt(10);
-	const auto sample = 20;
-	const auto series = 100000;
+	ICA::Reng reng(10);
+	const auto sample = 3;
+	const auto series = 1000;
 	
-	ICA::Matrix S(sample,series);
+	std::vector<ICA::Vector> s(sample);
 	#pragma omp parallel for
 	for (int i=0; i<sample; i++){
-		#pragma omp parallel for
-		for (int j=0;j<series;j++){
-		S(i,j) = std::sin((i+2)*(double)j*0.02);
-		}
+		s.at(i) = ICA::ChebytSeries(i+2, series, 0.1);
 	}
-	const ICA::Matrix A = ICA::RandMatrix(sample, mt);
+	ICA::Matrix S = ICA::VStack(s);
+
+	const ICA::Matrix A = ICA::RandMatrix(sample, reng);
 	ICA::Matrix X = A * S;
 	auto result = ICA::FastICA(X);
 
