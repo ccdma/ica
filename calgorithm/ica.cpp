@@ -10,7 +10,6 @@
 #include <chrono>
 #include <sstream>
 #include <Eigen/Dense>
-#include <boost/math/special_functions/chebyshev.hpp>
 
 namespace ICA {
 
@@ -143,14 +142,28 @@ namespace ICA {
 		}
 	}
 
-	// チェビシェフ多項式の値を計算します
-	// n: 次数(n>=1) return: T_n(x)の値
+	// チェビシェフ多項式の値を計算
+	// オーバーフローを避けるため、漸化式を利用
+	// n: 次数(n>=0) return: T_n(x)の値
 	double EvalChebyt(const double x, const int n){
-		return boost::math::chebyshev_t(n, x);
+		double t0 = 1.0;
+    double t1 = x;
+    if (n == 0){
+        return t0;
+    } else if (n == 1) {
+        return t1;
+    }
+    double t2;
+		for(int i=2; i<=n; i++){
+        t2 = 2*x*t1-t0;
+        t0 = t1;
+        t1 = t2;
+    }
+    return t2;
 	}
 }
 
-int smain(){
+int main(){
 	std::ofstream outputfile("out.csv");
 	double prev = 0.1;
 	for (int i=0; i<1000000; i++){
@@ -160,9 +173,10 @@ int smain(){
 		prev = ICA::EvalChebyt(prev, 4);
 	}
   outputfile.close();
+	return 0;
 }
 
-int main(){
+int smain(){
   std::mt19937 mt(10);
   const auto sample = 20;
   const auto series = 100000;
