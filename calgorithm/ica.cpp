@@ -17,7 +17,7 @@ namespace ICA {
 	using Vector = Eigen::VectorXd;
 	using Reng = std::mt19937; 
 
-	const int LOOP = 100;
+	const int LOOP = 500;
 	const int WRITE_LIMIT = 10000;
 
 	Matrix RandMatrix(int size, Reng& engine){
