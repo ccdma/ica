@@ -84,7 +84,7 @@ namespace ICA {
             Normalize(B, i);
             const auto diff = std::abs(prevBi.dot(B.col(i)));
             if (1.0 - 1.e-8 < diff && diff < 1.0 + 1.e-8) break;
-            if (j==LOOP) printf("[WARN] loop limit exceeded");
+            if (j==LOOP-1) printf("[WARN] loop limit exceeded");
           }
         }
         Matrix Y = B.transpose() * X_whiten;
