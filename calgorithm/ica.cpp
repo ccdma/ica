@@ -1,4 +1,4 @@
-#define DEBUG_PROGLESS
+// #define DEBUG_PROGLESS
 // #define DEBUG_MATRIX
 // #define EIGEN_USE_BLAS
 

@@ -1,3 +1,5 @@
+#define DEBUG_PROGLESS
+
 #include "ica.cpp"
 
 int main(){
