@@ -1,6 +1,3 @@
-#define DEBUG
-// #define EIGEN_USE_BLAS
-
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -10,6 +7,9 @@
 #include <sstream>
 #include <eigen3/Eigen/Dense>
 
+#define DEBUG
+// #define EIGEN_USE_BLAS
+
 namespace ICA {
 
     using Matrix = Eigen::MatrixXd;
@@ -17,8 +17,11 @@ namespace ICA {
 
     const int LOOP = 100;
 
-    Matrix RandMatrix(int size){
-      return Matrix::Random(size, size);
+    Matrix RandMatrix(int size, std::mt19937& engine){
+      std::uniform_real_distribution<double> distribution(-0.5, 0.5);
+      auto generator = [&] (double dummy) {return distribution(engine);};
+      Eigen::MatrixXd mat = Eigen::MatrixXd::Zero(size, size).unaryExpr(generator);// mat(size, size);
+      return mat;
     };
 
     // 正方行列でなくてはいけない
@@ -36,6 +39,7 @@ namespace ICA {
     };
 
     FastICAResult FastICA(const Matrix& X) {
+        std::mt19937 mt(0);
         const auto sample = X.rows();
         const auto series = X.cols();
         
@@ -59,7 +63,7 @@ namespace ICA {
         const auto g2 = [](double bx) { return 3*std::pow(bx, 2); };
 
         const auto I = X_whiten.rows();
-        auto B = RandMatrix(I);
+        auto B = RandMatrix(I, mt);
 
         for(int i=0; i<I; i++){
           Normalize(B, i);
@@ -112,16 +116,18 @@ namespace ICA {
 }
 
 int main(){
-  std::srand(0);
+  std::mt19937 mt(10);
   const auto sample = 100;
   const auto series = 10000;
+  
   ICA::Matrix S(sample,series);
   for (int i=0; i<sample; i++){
     for (int j=0;j<series;j++){
       S(i,j) = std::sin((i+2)*(double)j*0.02);
     }
   }
-  const ICA::Matrix A = ICA::Matrix::Random(sample, sample);
+  const ICA::Matrix A = ICA::RandMatrix(sample, mt);
+  std::cout << A << std::endl;
   ICA::Matrix X = A * S;
   auto result = ICA::FastICA(X);
 
