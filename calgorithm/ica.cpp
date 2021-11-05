@@ -143,7 +143,7 @@ namespace ICA {
 		<< "\ttotal:" << std::chrono::duration_cast<std::chrono::milliseconds>(now-start).count() << std::endl;
 		prev = now;
 #endif
-		return FastICAResult{W: B.transpose()*Atilda, Y: Y};
+		return FastICAResult{.W = B.transpose()*Atilda, .Y = Y};
 	};
     
 	std::vector<double> ToStdVec(Vector& v1){
