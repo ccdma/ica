@@ -12,3 +12,10 @@ $ g++ ica.cpp -I ./include/ -fopenmp
 ```
 $ OMP_NUM_THREADS=6 ./a.out
 ```
+
+## ssh
+
+```
+$ scp -Cr calgorithm b36697@cinnamon.kudpc.kyoto-u.ac.jp:~/calgorithm
+$ ssh b36697@cinnamon.kudpc.kyoto-u.ac.jp
+```
