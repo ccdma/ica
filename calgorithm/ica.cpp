@@ -197,7 +197,7 @@ namespace ICA {
 	}
 }
 
-int main(){
+int sample(){
 	ICA::Reng reng(10);
 	const auto sample = 50;
 	const auto series = 100000;
