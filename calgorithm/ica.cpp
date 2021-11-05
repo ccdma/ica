@@ -199,13 +199,13 @@ namespace ICA {
 
 int main(){
 	ICA::Reng reng(10);
-	const auto sample = 10;
-	const auto series = 1000000;
+	const auto sample = 50;
+	const auto series = 100000;
 	
 	std::vector<ICA::Vector> s(sample);
 	#pragma omp parallel for
 	for (int i=0; i<sample; i++){
-		s.at(i) = ICA::ChebytSeries(i+2, series, 0.1);
+		s.at(i) = ICA::ChebytSeries(i+2, series, 0.2);
 	}
 	ICA::Matrix S = ICA::VStack(s);
 
