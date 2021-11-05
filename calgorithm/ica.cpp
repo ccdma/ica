@@ -1,24 +1,21 @@
+#define DEBUG
+// #define EIGEN_USE_BLAS
+
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <random>
 #include <cmath>
+#include <chrono>
 #include <sstream>
-
-// #define EIGEN_USE_BLAS
-
 #include <eigen3/Eigen/Dense>
-using std::vector;
-using std::srand;
-
-
-#define DEBUG false
-#define LOOP 1000
 
 namespace ICA {
 
     using Matrix = Eigen::MatrixXd;
     using Vector = Eigen::VectorXd;
+
+    const int LOOP = 100;
 
     Matrix RandMatrix(int size){
       return Matrix::Random(size, size);
@@ -53,8 +50,10 @@ namespace ICA {
         Matrix Atilda = lambdas.cwiseSqrt().asDiagonal().inverse() * P.transpose();
         Matrix X_whiten = Atilda * X_center;
 
+#ifdef DEBUG
         // 単位行列であることを確認
-        if (DEBUG) std::cout << (X_whiten * X_whiten.transpose()) / double(X_whiten.cols() - 1) << std::endl;
+        std::cout << (X_whiten * X_whiten.transpose()) / double(X_whiten.cols() - 1) << std::endl;
+#endif
 
         const auto g = [](double bx) { return std::pow(bx, 3); };
         const auto g2 = [](double bx) { return 3*std::pow(bx, 2); };
@@ -66,7 +65,10 @@ namespace ICA {
           Normalize(B, i);
         }
 
-        if(DEBUG) std::cout << B * B.transpose() << std::endl;
+#ifdef DEBUG
+        // 単位行列であることを確認
+        std::cout << B * B.transpose() << std::endl;
+#endif
 
         for(int i=0; i<I; i++){
           for(int j=0; j<LOOP; j++){
@@ -93,7 +95,7 @@ namespace ICA {
     };
     
     std::vector<double> ToStdVec(Vector& v1){
-      vector<double> v2(v1.data(), v1.data() + v1.size());
+      std::vector<double> v2(v1.data(), v1.data() + v1.size());
       return v2;
     }
 
@@ -110,7 +112,7 @@ namespace ICA {
 }
 
 int main(){
-  srand(0);
+  std::srand(0);
   const auto sample = 100;
   const auto series = 10000;
   ICA::Matrix S(sample,series);
