@@ -20,8 +20,7 @@ namespace ICA {
     Matrix RandMatrix(int size, std::mt19937& engine){
       std::uniform_real_distribution<double> distribution(-0.5, 0.5);
       auto generator = [&] (double dummy) {return distribution(engine);};
-      Eigen::MatrixXd mat = Eigen::MatrixXd::Zero(size, size).unaryExpr(generator);// mat(size, size);
-      return mat;
+      return Matrix::Zero(size, size).unaryExpr(generator);
     };
 
     // 正方行列でなくてはいけない
@@ -117,8 +116,8 @@ namespace ICA {
 
 int main(){
   std::mt19937 mt(10);
-  const auto sample = 100;
-  const auto series = 10000;
+  const auto sample = 3;
+  const auto series = 100;
   
   ICA::Matrix S(sample,series);
   for (int i=0; i<sample; i++){
@@ -127,7 +126,6 @@ int main(){
     }
   }
   const ICA::Matrix A = ICA::RandMatrix(sample, mt);
-  std::cout << A << std::endl;
   ICA::Matrix X = A * S;
   auto result = ICA::FastICA(X);
 
