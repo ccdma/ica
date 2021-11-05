@@ -43,9 +43,10 @@ namespace ICA {
 	FastICAResult FastICA(const Matrix& X) {
 
 #ifdef DEBUG_PROGLESS
-	std::chrono::system_clock::time_point prev, now;
-	prev = std::chrono::system_clock::now();
-	now = std::chrono::system_clock::now();
+	std::chrono::system_clock::time_point start, prev, now;
+	start = std::chrono::system_clock::now();
+	prev = start;
+	now = start;
 	std::cout 
 	<< "[PROGLESS] start fastica session"
 	<< "\t" << std::chrono::duration_cast<std::chrono::milliseconds>(now-prev).count() << std::endl;
@@ -121,10 +122,17 @@ namespace ICA {
 		<< "\t" << std::chrono::duration_cast<std::chrono::milliseconds>(now-prev).count() << std::endl;
 		prev = now;
 #endif
-
 		}
 		Matrix Y = B.transpose() * X_whiten;
 
+#ifdef DEBUG_PROGLESS
+		now = std::chrono::system_clock::now();
+		std::cout
+		<< "[PROGLESS] end fastica "
+		<< "\t" << std::chrono::duration_cast<std::chrono::milliseconds>(now-prev).count()
+		<< "\ttotal:" << std::chrono::duration_cast<std::chrono::milliseconds>(now-start).count() << std::endl;
+		prev = now;
+#endif
 		return FastICAResult{Y};
 	};
     
