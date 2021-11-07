@@ -1,4 +1,4 @@
-from algorithm.fastica_complex import fast_ica
+from algorithm.fastica_complex import cfast_ica
 from eval.log import Printer
 import numpy as np
 from eval.operation import periodic_correlation
@@ -13,7 +13,7 @@ p = Printer.with_stdout()
 S = np.array([weyl_series(np.random.rand(), np.random.rand(), 1000) for _ in range(4)])
 A = mixed_matrix(4)
 X = A @ S
-Y = fast_ica(X, _assert=True).Y
+Y = cfast_ica(X, _assert=True).Y
 l = 2
 p.pprint(periodic_correlation(S, l))
 p.pprint(periodic_correlation(X, l))
